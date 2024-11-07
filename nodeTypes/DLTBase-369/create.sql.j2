@@ -1,0 +1,67 @@
+# Storage Location-database and schema
+
+{%if config.readfiles != true%}
+{% set srcSchName = sources[0].dependencies[0].node.location.name %}
+{% set db = storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='database') | first %}
+{% set sch = storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='schema') | first %}
+{%endif%}
+
+{% set tgtSchName = node.location.name %}
+{% set tdb = storageLocations | selectattr('name', 'equalto', tgtSchName) | map(attribute='database') | first %}
+{% set tsch = storageLocations | selectattr('name', 'equalto', tgtSchName) | map(attribute='schema') | first %}
+
+{%set join_clause = sources[0].join %}
+{% set parts = join_clause.split('FROM') %}
+{% set other_clause = parts[1] %}
+
+{{ stage('CREATE '+ config.DLTtype ) }}
+
+{# CreateSQL for Table #}
+
+CREATE OR REFRESH {{config.DLTtype}} 
+{%if config.readfiles != true%}{{ ref_no_link(node.location.name, node.name) }}
+{%else%}
+`{{tdb}}`.`{{tsch}}`.`{{node.name}}_raw`
+{%endif%}
+{%if config.readfiles != true%}
+      (
+        {% for col in columns %}
+            `{{ col.name }}` {{ col.dataType }}
+            {%- if not col.nullable %} NOT NULL
+            {% endif %}
+            {%- if col.description | length > 0 %} COMMENT '{{ col.description | escape }}'{% endif %}
+            {%- if not loop.last -%}, {% endif %}
+        {% endfor %}
+      {%if config.constraints == true%}
+	
+	       {% set column, expression,violation = config.constraintsspec.get('items') | map(attribute='columnName.name')| list, config.constraintsspec.get('items') | map(attribute='sqlExpression') | list ,
+	      config.constraintsspec.get('items') | map(attribute='onviolation') | list%}
+	     
+	    {% for r in column %}
+	
+			CONSTRAINT  {{r}} EXPECT ({{expression[loop.index0]}}) ON VIOLATION {{violation[loop.index0]}}  
+      {%- if not loop.last -%}, {% endif %}                
+     {% endfor %}
+
+	{%endif%})
+         {%- if node.description | length > 0 %} COMMENT '{{ node.description |escape }}'
+        {% endif %}
+    {%endif%}
+    
+    {%if config.tblproperties != ""%}TBLPROPERTIES ({{config.tblproperties}}){%endif%}
+    AS
+    SELECT 
+    {%if config.readfiles == true%} * 
+    {%else%}
+    {% for col in sources[0].columns %}
+            {{ get_source_transform(col) }} AS `{{ col.name }}`
+            {%- if not loop.last -%}, {% endif %}
+    {% endfor %}
+    {%endif%} 
+    FROM {%if config.DLTtype == 'STREAMING TABLE'%} STREAM {%endif%}    
+    {%if config.readfiles == true %}cloud_files('{{config.fileloc}}','{{config.fileformat}}',map('cloudFiles.inferColumnTypes', 'true'{%if config.fileformat == 'csv'%},'delimiter','{{config.delimiter}}','header','{{config.header}}' {%endif%}))
+    {%else%}
+    (`{{db}}`.`{{sch}}`.`{{sources[0].dependencies[0].node.name}}`)
+    {{ get_clause_new(join_clause) }}
+    {%endif%}
+    
