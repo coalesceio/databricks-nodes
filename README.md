@@ -25,7 +25,7 @@ automatically created for each streaming table.
 1.Loading file from external location is supported.Loading from
 databricks managed volume or external volume is currently not supported
 
-2.The node which loads from a file creates a streaming table.For further processing,u can Re-Sync the columns in the mapping grid using Re-Sync columns button.
+2.The node which loads from a file creates a streaming table.For further processing,Re-Sync the columns in the mapping grid using Re-Sync columns button.
 The streaming table can be re-created with the Columns inferred using Include Columns Inferred option.
 
 3.Materialized View is currently not supported by DLT node type.
