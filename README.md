@@ -5,8 +5,7 @@
 The Coalesce DLT node type allows you to create a streaming table,a type
 of Delta Live Table.
 
-[[Delta Live
-Tables]{.underline}](https://docs.databricks.com/en/delta-live-tables/index.html)
+[[Delta Live Tables](https://docs.databricks.com/en/delta-live-tables/index.html)
 is a declarative framework for building reliable, maintainable, and
 testable data processing pipelines. Delta Live Tables manages how your
 data is transformed based on queries you define for each processing
@@ -15,8 +14,8 @@ expectations, which allow you to define expected data quality and
 specify how to handle records that fail those expectations.
 
 Databricks recommends using streaming tables to ingest data using
-Databricks SQL. A [*[streaming
-table]{.underline}*](https://docs.databricks.com/en/tables/streaming.html#additional-resources)
+Databricks SQL. A [streaming
+table](https://docs.databricks.com/en/tables/streaming.html#additional-resources)
 is a table registered to Unity Catalog with extra support for streaming
 or incremental data processing. A Delta Live Tables pipeline is
 automatically created for each streaming table.
@@ -36,11 +35,8 @@ to the Browser using 'Add source' tab
 
 The DLT has two configuration groups:
 
--   [[Node
-    > Properties]{.underline}](https://github.com/Anandhi-Sekaran-DE/PRJAS100073/edit/databricks-04/README.md#DLT-work-node-properties)
-
--   [[DLT
-    > Options]{.underline}](https://github.com/Anandhi-Sekaran-DE/PRJAS100073/edit/databricks-04/README.md#DLT-options)
+  * [Node Properties]
+  * Options
 
 **DLT Node Properties**
 
