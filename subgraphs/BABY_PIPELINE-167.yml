@@ -2,5 +2,7 @@ fileVersion: 1
 id: "167"
 name: BABY_PIPELINE
 steps:
+  - 64f111e6-5426-43cb-a863-8910482aba5b
   - b80b783d-9404-4285-9391-9b4b0e9d3d77
+  - de3ca0f9-3e55-40de-a129-9f61f368be85
 type: Subgraph
