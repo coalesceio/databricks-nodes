@@ -128,7 +128,11 @@ CREATE OR REFRESH {{config.DLTtype}}
     {%if config.readfiles == true and config.inccolumns == false%} * 
     {%else%}
     {% for col in sources[0].columns %}
-            {{ get_source_transform(col) }} AS `{{ col.name }}`
+            {%if col.transform == "" %}
+                `{{col.name}}`
+            {%else%}
+                 {{ get_source_transform(col) }} AS `{{ col.name }}`
+            {%endif%}
             {%- if not loop.last -%}, {% endif %}
     {% endfor %}
     {%-endif%} 
