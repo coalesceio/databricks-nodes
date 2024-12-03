@@ -44,13 +44,13 @@ operation:
           columnCounter: 4c976bec-ba20-4e20-acdb-aed27fd7fa87
           stepCounter: de3ca0f9-3e55-40de-a129-9f61f368be85
         config: {}
-        dataType: INT
+        dataType: STRING
         description: ""
-        name: Year
+        name: FirstName
         nullable: true
         sourceColumnReferences:
           - columnReferences:
-              - columnCounter: 950b320e-f6e7-4759-9f1a-6a8598e8a871
+              - columnCounter: d70490e9-7678-428d-b7d8-5d330fbf47c9
                 stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
             transform: ""
       - appliedColumnTests: {}
@@ -81,7 +81,7 @@ operation:
           joinCondition: |-
             FROM {{ ref('SOURCE', 'dlt_babyraw_enriched') }} `dlt_babyraw_enriched`
             WHERE Year = 2021
-            GROUP BY Year
+            GROUP BY FirstName
             ORDER BY Total_Count DESC
             LIMIT 10;
         name: top_baby_names_final
