@@ -29,6 +29,12 @@ metadata:
             type: toggleButton
             default: false
 
+          - displayName: Include Columns Infered
+            attributeName: inccolumns
+            type: toggleButton
+            enableIf: "{% if config.readfiles %} true {% else %} false {% endif %}"
+            default: false
+
           - displayName: File location
             attributeName: fileloc
             type: textBox

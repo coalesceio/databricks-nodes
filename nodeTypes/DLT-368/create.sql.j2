@@ -105,7 +105,7 @@ CREATE OR REFRESH {{config.DLTtype}}
 {%else%}
 `{{tdb}}`.`{{tsch}}`.`{{node.name}}`
 {%endif%}
-{%- if config.readfiles != true%}
+{%- if config.readfiles != true or config.inccolumns == true%}
       (
         {% for col in columns %}
             `{{ col.name }}` {{ col.dataType }}
@@ -125,7 +125,7 @@ CREATE OR REFRESH {{config.DLTtype}}
     {%if config.tblproperties != ""-%}TBLPROPERTIES ({{config.tblproperties}}){%endif%}
     AS
     SELECT 
-    {%if config.readfiles == true%} * 
+    {%if config.readfiles == true and config.inccolumns == false%} * 
     {%else%}
     {% for col in sources[0].columns %}
             {{ get_source_transform(col) }} AS `{{ col.name }}`

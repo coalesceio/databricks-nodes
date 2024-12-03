@@ -1,6 +1,6 @@
 fileVersion: 1
-id: b80b783d-9404-4285-9391-9b4b0e9d3d77
-name: dlt_babyraw
+id: d5e62178-9770-4586-a9a8-10ced4973ccd
+name: dlt_babraw
 operation:
   config:
     DLTtype: STREAMING TABLE
@@ -17,7 +17,7 @@ operation:
         - {}
     foreignkeyname: ""
     header: true
-    inccolumns: false
+    inccolumns: true
     parentabname: ex:`<catalog>`.`<schema>`.`<tablename>`
     partclause: false
     partitionclause:
@@ -33,7 +33,7 @@ operation:
     tblproperties: "\"quality\"=\"bronze\""
   database: ""
   deployEnabled: true
-  description: ""
+  description: Raw table version
   isMultisource: false
   locationName: SOURCE
   materializationType: table
@@ -45,8 +45,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 58529167-6beb-4bbe-bd46-bad0c5bb4828
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+          columnCounter: bc8123e6-5150-46fa-922b-01d77a3f37fd
+          stepCounter: d5e62178-9770-4586-a9a8-10ced4973ccd
         config: {}
         dataType: INT
         defaultValue: ""
@@ -62,8 +62,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: ed26e60a-1da3-4b05-bd60-889669ea86e6
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+          columnCounter: 0cfb90dd-e677-446f-a08f-ece98a1b51d0
+          stepCounter: d5e62178-9770-4586-a9a8-10ced4973ccd
         config: {}
         dataType: STRING
         defaultValue: ""
@@ -72,15 +72,15 @@ operation:
         nullable: true
         sourceColumnReferences:
           - columnReferences: []
-            transform: ""
+            transform: substr(`FirstName`,1,2)
         transform: ""
       - acceptedValues:
           strictMatch: true
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 96ad023c-3072-47e9-ace4-431f17f13d9f
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+          columnCounter: dbe424cf-e262-4516-9bff-acc7fd120781
+          stepCounter: d5e62178-9770-4586-a9a8-10ced4973ccd
         config: {}
         dataType: STRING
         defaultValue: ""
@@ -96,8 +96,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 024fca63-c9bf-45a7-89c1-2f760d5f83b4
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+          columnCounter: d05ff017-c867-46b3-ab00-a46a272641ea
+          stepCounter: d5e62178-9770-4586-a9a8-10ced4973ccd
         config: {}
         dataType: STRING
         defaultValue: ""
@@ -113,30 +113,13 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 7b9d47ca-5bd8-429b-83a8-c0c616bece17
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+          columnCounter: ecd55051-5e31-43e3-beb3-f9d9c0ca34c4
+          stepCounter: d5e62178-9770-4586-a9a8-10ced4973ccd
         config: {}
         dataType: INT
         defaultValue: ""
         description: ""
         name: Count
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences: []
-            transform: ""
-        transform: ""
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: 479ceac0-a689-4833-95ca-eacf20a89910
-          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
-        config: {}
-        dataType: STRING
-        defaultValue: ""
-        description: ""
-        name: _rescued_data
         nullable: true
         sourceColumnReferences:
           - columnReferences: []
@@ -151,9 +134,9 @@ operation:
         dependencies: []
         join:
           joinCondition: ""
-        name: dlt_babyraw
+        name: dlt_babraw
         noLinkRefs: []
-  name: dlt_babyraw
+  name: dlt_babraw
   overrideSQL: false
   schema: ""
   sqlType: "368"
