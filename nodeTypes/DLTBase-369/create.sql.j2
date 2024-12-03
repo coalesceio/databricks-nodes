@@ -21,7 +21,7 @@
 CREATE OR REFRESH {{config.DLTtype}} 
 {%if config.readfiles != true%}{{ ref_no_link(node.location.name, node.name) }}
 {%else%}
-`{{tdb}}`.`{{tsch}}`.`{{node.name}}_raw`
+`{{tdb}}`.`{{tsch}}`.`{{node.name}}`
 {%endif%}
 {%if config.readfiles != true%}
       (

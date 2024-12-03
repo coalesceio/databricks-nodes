@@ -5,10 +5,12 @@ metadata:
   defaultStorageLocation: null
   error: null
   nodeMetadataSpec: |
-    capitalized: DLT1.0
-    short: DLT
+    capitalized: dlt
+    short: dlt
     plural: Delta Live Tables
     tagColor: '#35D491'
+
+    isColumnResyncEnabled: true
 
     config:
     - groupName: Options
