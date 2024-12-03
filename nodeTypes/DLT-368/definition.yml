@@ -29,7 +29,7 @@ metadata:
             type: toggleButton
             default: false
 
-          - displayName: Include Columns Infered
+          - displayName: Include Columns Inferred
             attributeName: inccolumns
             type: toggleButton
             enableIf: "{% if config.readfiles %} true {% else %} false {% endif %}"
