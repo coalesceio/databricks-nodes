@@ -67,7 +67,9 @@ There are four configs within the Node Properties group.
         > into streaming table
 
     -   False - Allows you to load from table source
-    -   
+      
+-   Include Columns Inferred: After streaming table is created from file and columns synced to mapping grid,we can re-create the streaming table with any added transformations by enabling this toggle
+
 -   File location(Read Files-true):The external cloud location of file
 
 -   File format(Read Files-true):The file format of the file to be
