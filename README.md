@@ -25,9 +25,8 @@ automatically created for each streaming table.
 1.Loading file from external location is supported.Loading from
 databricks managed volume or external volume is currently not supported
 
-2.The node which loads from a file creates a streaming table with suffix
-\_raw.For further processing on the table created,we have add the table
-to the Browser using 'Add source' tab
+2.The node which loads from a file creates a streaming table.For further processing,u can Re-Sync the columns in the mapping grid using Re-Sync columns button.
+The streaming table can be re-created with the Columns inferred using Include Columns Inferred option.
 
 3.Materialized View is currently not supported by DLT node type.
 
@@ -35,15 +34,14 @@ to the Browser using 'Add source' tab
 
 The DLT has two configuration groups:
 
-  * [Node Properties]
-  * Options
+* [DLT Node Properties](#dlt-node-properties)
+* [DLT Source Data](#dlt-source-data)
 
-**DLT Node Properties**
+<h4 id="dlt-node-properties"> DLT Node Properties </h4>
 
 There are four configs within the Node Properties group.
 
--   Storage Location(required): Storage Location where the Dynamic Table
-    > will be created.
+-   Storage Location(required): Storage Location where the Delta Live Table will be created.
 
 -   Node Type(required): Name of template used to create node objects.
 
@@ -51,16 +49,11 @@ There are four configs within the Node Properties group.
 
 -   Deploy Enabled(required):
 
-    -   If TRUE the node will be deployed or redeployed when changes are
-        > detected.
+    -   If TRUE the node will be deployed or redeployed when changes are detected.
 
-    -   If FALSE the node will not be deployed or the node will be
-        > dropped during redeployment.
+    -   If FALSE the node will not be deployed or the node will be dropped during redeployment.
 
-**DLT Options**
-
-![](vertopal_e2891625931a467189b3388ccf4f195b/media/image1.png){width="3.3766415135608048in"
-height="4.640625546806649in"}
+<h4 id="dlt-source-data"> DLT Source Data </h4>
 
 -   Type of Delta Live Table: The type of Delta Live Table
 
@@ -68,17 +61,13 @@ height="4.640625546806649in"}
 
 \* Materialized view
 
--   Read Files: True or False Toggle to whether the source id file or
-    > table
+-   Read Files: True or False Toggle to whether the source id file or table
 
     -   True - Allows you to load the file from external cloud location
         > into streaming table
 
     -   False - Allows you to load from table source
-
-```{=html}
-<!-- -->
-```
+    -   
 -   File location(Read Files-true):The external cloud location of file
 
 -   File format(Read Files-true):The file format of the file to be
@@ -90,23 +79,19 @@ height="4.640625546806649in"}
 
 -   Delimiter(Read Files-true):The delimiter used in case of csv file
 
--   Header(Read Files-true):In case of csv file,the header is needed for
-    > file parsing
+-   Header(Read Files-true):In case of csv file,the header is needed for file parsing
 
 -   Table Properties:Table properties like quality can be mentioned here
 
--   Partition by(Read Files-false):Columns based on which streaming
-    > table is to be partitioned
+-   Partition by(Read Files-false):Columns based on which streaming  table is to be partitioned
 
--   Table constraints(Read Files-false):Primary key and Foreign key
-    > constraints can be specified
+-   Table constraints(Read Files-false):Primary key and Foreign key  constraints can be specified
 
 \*Primary key
 
 \*Foreign key
 
--   Other Constraints(Read Files-false):Any other constraints specific
-    > to columns can be specified here.
+-   Other Constraints(Read Files-false):Any other constraints specific to columns can be specified here.
 
 > \*Column name
 >
