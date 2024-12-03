@@ -1,0 +1,95 @@
+fileVersion: 1
+id: de3ca0f9-3e55-40de-a129-9f61f368be85
+name: top_baby_names_final
+operation:
+  config:
+    DLTtype: STREAMING TABLE
+    constraints: false
+    constraintsspec:
+      items:
+        - {}
+    delimiter: ""
+    fileformat: ""
+    fileloc: ""
+    foreign: false
+    foreignkeycon:
+      items:
+        - {}
+    foreignkeyname: ""
+    header: false
+    parentabname: ex:`<catalog>`.`<schema>`.`<tablename>`
+    partclause: false
+    partitionclause:
+      items:
+        - {}
+    primary: false
+    primarykeycon:
+      items:
+        - {}
+    primarykeyname: ""
+    readfiles: false
+    tableconstraints: false
+    tblproperties: ""
+  database: ""
+  deployEnabled: true
+  description: New York popular baby first name data cleaned and prepared for analysis.
+  isMultisource: false
+  locationName: SOURCE
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 4c976bec-ba20-4e20-acdb-aed27fd7fa87
+          stepCounter: de3ca0f9-3e55-40de-a129-9f61f368be85
+        config: {}
+        dataType: INT
+        description: ""
+        name: Year
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 950b320e-f6e7-4759-9f1a-6a8598e8a871
+                stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: eb889115-76ca-4773-949d-6d1826bef534
+          stepCounter: de3ca0f9-3e55-40de-a129-9f61f368be85
+        config: {}
+        dataType: long
+        description: ""
+        name: Total_Count
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 41261898-153c-44b0-9238-3e693fc566bc
+                stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+            transform: sum(`dlt_babyraw_enriched`.`Count`)
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          dlt_babyraw_enriched: 64f111e6-5426-43cb-a863-8910482aba5b
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE
+            nodeName: dlt_babyraw_enriched
+        join:
+          joinCondition: |-
+            FROM {{ ref('SOURCE', 'dlt_babyraw_enriched') }} `dlt_babyraw_enriched`
+            WHERE Year = 2021
+            GROUP BY Year
+            ORDER BY Total_Count DESC
+            LIMIT 10;
+        name: top_baby_names_final
+        noLinkRefs: []
+  name: top_baby_names_final
+  overrideSQL: false
+  schema: ""
+  sqlType: "368"
+  type: sql
+  version: 1
+type: Node

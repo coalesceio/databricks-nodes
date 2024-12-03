@@ -1,0 +1,161 @@
+fileVersion: 1
+id: b80b783d-9404-4285-9391-9b4b0e9d3d77
+name: dlt_babyraw
+operation:
+  config:
+    DLTtype: STREAMING TABLE
+    constraints: false
+    constraintsspec:
+      items:
+        - {}
+    delimiter: "|"
+    fileformat: csv
+    fileloc: s3://dataentrega/deltalive/samp
+    foreign: false
+    foreignkeycon:
+      items:
+        - {}
+    foreignkeyname: ""
+    header: true
+    parentabname: ex:`<catalog>`.`<schema>`.`<tablename>`
+    partclause: false
+    partitionclause:
+      items:
+        - {}
+    primary: false
+    primarykeycon:
+      items:
+        - {}
+    primarykeyname: ""
+    readfiles: true
+    tableconstraints: false
+    tblproperties: "\"quality\"=\"bronze\""
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: SOURCE
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 58529167-6beb-4bbe-bd46-bad0c5bb4828
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: INT
+        defaultValue: ""
+        description: ""
+        name: Year
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: ed26e60a-1da3-4b05-bd60-889669ea86e6
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: FirstName
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 96ad023c-3072-47e9-ace4-431f17f13d9f
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: County
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 024fca63-c9bf-45a7-89c1-2f760d5f83b4
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: Sex
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7b9d47ca-5bd8-429b-83a8-c0c616bece17
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: INT
+        defaultValue: ""
+        description: ""
+        name: Count
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 479ceac0-a689-4833-95ca-eacf20a89910
+          stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: _rescued_data
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies: []
+        join:
+          joinCondition: ""
+        name: dlt_babyraw
+        noLinkRefs: []
+  name: dlt_babyraw
+  overrideSQL: false
+  schema: ""
+  sqlType: "368"
+  type: sql
+  version: 1
+type: Node

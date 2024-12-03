@@ -1,0 +1,126 @@
+fileVersion: 1
+id: 64f111e6-5426-43cb-a863-8910482aba5b
+name: dlt_babyraw_enriched
+operation:
+  config:
+    DLTtype: STREAMING TABLE
+    constraints: true
+    constraintsspec:
+      items:
+        - columnName:
+            columnCounter: d70490e9-7678-428d-b7d8-5d330fbf47c9
+            stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+          onviolation: DROP ROW
+          sqlExpression: FirstName IS NOT NULL
+        - columnName:
+            columnCounter: 41261898-153c-44b0-9238-3e693fc566bc
+            stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+          onviolation: DROP ROW
+          sqlExpression: Count >0
+    delimiter: ""
+    fileformat: ""
+    fileloc: ""
+    foreign: false
+    foreignkeycon:
+      items:
+        - {}
+    foreignkeyname: ""
+    header: false
+    parentabname: ex:`<catalog>`.`<schema>`.`<tablename>`
+    partclause: false
+    partitionclause:
+      items:
+        - {}
+    primary: false
+    primarykeycon:
+      items:
+        - {}
+    primarykeyname: ""
+    readfiles: false
+    tableconstraints: false
+    tblproperties: "\"quality\"=\"silver\""
+  database: ""
+  deployEnabled: true
+  description: New York popular baby first name data cleaned and prepared for analysis.
+  isMultisource: false
+  locationName: SOURCE
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 950b320e-f6e7-4759-9f1a-6a8598e8a871
+          stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+        config: {}
+        dataType: INT
+        description: ""
+        name: Year
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 58529167-6beb-4bbe-bd46-bad0c5bb4828
+                stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: d70490e9-7678-428d-b7d8-5d330fbf47c9
+          stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+        config: {}
+        dataType: STRING
+        description: ""
+        name: FirstName
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: ed26e60a-1da3-4b05-bd60-889669ea86e6
+                stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 928fc3d3-b5b7-46b7-a85b-caecc9acddfb
+          stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+        config: {}
+        dataType: STRING
+        description: ""
+        name: Sex
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 024fca63-c9bf-45a7-89c1-2f760d5f83b4
+                stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 41261898-153c-44b0-9238-3e693fc566bc
+          stepCounter: 64f111e6-5426-43cb-a863-8910482aba5b
+        config: {}
+        dataType: INT
+        description: ""
+        name: Count
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 7b9d47ca-5bd8-429b-83a8-c0c616bece17
+                stepCounter: b80b783d-9404-4285-9391-9b4b0e9d3d77
+            transform: ""
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases: {}
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: SOURCE
+            nodeName: dlt_babyraw
+        join:
+          joinCondition: FROM {{ ref('SOURCE', 'dlt_babyraw') }} `dlt_babyraw`
+        name: dlt_babyraw_enriched
+        noLinkRefs: []
+  name: dlt_babyraw_enriched
+  overrideSQL: false
+  schema: ""
+  sqlType: "368"
+  type: sql
+  version: 1
+type: Node
