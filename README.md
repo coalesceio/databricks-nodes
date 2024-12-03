@@ -5,7 +5,7 @@
 The Coalesce DLT node type allows you to create a streaming table,a type
 of Delta Live Table.
 
-[[Delta Live Tables](https://docs.databricks.com/en/delta-live-tables/index.html)
+[Delta Live Tables](https://docs.databricks.com/en/delta-live-tables/index.html)
 is a declarative framework for building reliable, maintainable, and
 testable data processing pipelines. Delta Live Tables manages how your
 data is transformed based on queries you define for each processing
