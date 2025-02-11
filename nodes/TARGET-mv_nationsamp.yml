@@ -31,7 +31,7 @@ operation:
     schedulerefresh: true
     tableconstraints: true
     tblproperties: ""
-    tp: EVERY WEEKS
+    tp: EVERY HOURS
     tph: "2"
   database: ""
   deployEnabled: true
