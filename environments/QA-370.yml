@@ -1,0 +1,11 @@
+fileVersion: 1
+id: "370"
+mappingDefinitions:
+  SOURCE:
+    database: samples
+    schema: tpch
+  TARGET:
+    database: coalesce_aws_dbx
+    schema: de-target-dev
+name: QA
+type: Environment
