@@ -10,6 +10,8 @@ metadata:
     plural: Works
     tagColor: '#2EB67D'
 
+    isColumnResyncEnabled: true
+
     config:
         - groupName: Options
           items:

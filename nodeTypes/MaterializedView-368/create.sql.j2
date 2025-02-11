@@ -1,0 +1,406 @@
+{#
+    Copyright (c) 2023 Coalesce. All rights reserved.
+This script and its associated documentation are confidential and proprietary to Coalesce.
+Unauthorized reproduction, distribution, or disclosure of this material is strictly prohibited.
+Coalesce permits you to copy and modify this script for the purposes of using with Coalesce but
+does not permit copying or modification for any other purpose.
+#}
+{# == Node Type Version        : 1  == #}
+{# == Node Type Name           : Materialized View  == #}
+{# == Node Type Description    : This node creates a materialized view in the target == #}
+    
+      
+{% if desiredState == currentState %}
+
+{{ stage('Nothing to do.') }}
+select 1 = 0
+
+{% elif desiredState == undefined %}
+
+    {# View Name #}
+    {% set targetObjectDatabase = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[0] %} 
+    {% set targetObjectSchema = ref_no_link(currentState.node.location.name, currentState.node.name).split('.')[1] %} 
+    {% set fullyQualifiedTargetObjectName = ref_no_link(currentState.node.location.name, currentState.node.name) %}
+    
+       {{ stage('Drop Materialized View' , true, "sql", "drop") }}
+       DROP MATERIALIZED VIEW IF EXISTS {{ fullyQualifiedTargetObjectName }}
+
+{% elif currentState == undefined or (currentState != undefined and desiredState != currentState) %}
+
+# Storage Location-database and schema
+
+{% set srcSchName = desiredState.sources[0].dependencies[0].node.location.name %}
+{% set db = desiredState.storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='database') | first %}
+{% set sch = desiredState.storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='schema') | first %}
+
+# Target Location database and schema
+
+{% set tgtSchName = desiredState.node.location.name %}
+{% set tdb = desiredState.storageLocations | selectattr('name', 'equalto', tgtSchName) | map(attribute='database') | first %}
+{% set tsch = desiredState.torageLocations | selectattr('name', 'equalto', tgtSchName) | map(attribute='schema') | first %}
+
+{%set join_clause = desiredState.sources[0].join %}
+{% set parts = join_clause.split('FROM') %}
+{% set other_clause = parts[1] %}
+
+{% set ns = namespace( storageLocationTest= true,partValues="",primarykeyValues="",foreignkeyValues="",oconstraints="",
+descolchanges = 0,othercolchanges = 0,clusterTest = false,colchanges=0,nsCurrentDepStorageLocations="",nsCurrentSourceStorageLocations="",nsDesiredDepStorageLocations="",nsDesiredSourceStorageLocations="",sourcestorageLocationTest=true,scheduleref="",createTst=false,alterTest=false ) %}
+
+       
+        {%if currentState !=undefined%} 
+   
+              
+		     {# Node #}
+             {% set nodeNameTest = currentState.node.name == desiredState.node.name %}		   
+		     {% set joinTest = currentState.join == desiredState.join %}
+           
+            {# Current State Source Storage Location Info #}
+            {% for source in currentState.sources %}
+                {% for dep in source.dependencies %}
+                    {% set depSourceLocation = dep.node.location.name %}
+                    {% if loop.first %}
+                        {% set ns.nsCurrentDepStorageLocations = depSourceLocation %}
+                    {% else %}
+                        {% set ns.nsCurrentDepStorageLocations = ns.nsCurrentDepStorageLocations + ',' + depSourceLocation %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if loop.first %}
+                    {% set ns.nsCurrentSourceStorageLocations = ns.nsCurrentDepStorageLocations %}
+                {% else %}
+                    {% set ns.nsCurrentSourceStorageLocations = ns.nsCurrentSourceStorageLocations + ',' + ns.nsCurrentDepStorageLocations %}
+                {% endif %}
+            {% endfor %}
+
+            
+            {% set currentStorageLocations = (ns.nsCurrentSourceStorageLocations).split(',') | list %}
+            {% set currentUniqueStorageLocations = currentStorageLocations | unique | sort | list %}
+
+            
+            {# Desired State Source Storage Location Info #}
+            {% for source in desiredState.sources %}
+                {% for dep in source.dependencies %}
+                    {% set depSourceLocation = dep.node.location.name %}
+                    {% if loop.first %}
+                        {% set ns.nsDesiredDepStorageLocations = depSourceLocation %}
+                    {% else %}
+                        {% set ns.nnsDesiredDepStorageLocations = ns.nsDesiredDepStorageLocations + ',' + depSourceLocation %}
+                    {% endif %}
+                {% endfor %}
+                
+                {% if loop.first %}
+                    {% set ns.nsDesiredSourceStorageLocations = ns.nsDesiredDepStorageLocations %}
+                {% else %}
+                    {% set ns.nsDesiredSourceStorageLocations = ns.nsDesiredSourceStorageLocations + ',' + ns.nsDesiredDepStorageLocations %}
+                {% endif %}
+            {% endfor %}
+
+           
+            {% set desiredStorageLocations = (ns.nsDesiredSourceStorageLocations).split(',') | list %}
+            {% set desiredUniqueStorageLocations = desiredStorageLocations | unique | sort | list %}
+
+            {# Source storage location Test  #}
+            {% for name in desiredUniqueStorageLocations if ns.sourcestorageLocationTest == true %}
+                {# Current mappings #}
+                {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
+                {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
+                {% set currentDatabaseSchema = currentDatabase + '.' + currentSchema %}
+                
+                {# Desired mappings #}
+                {% set desiredDatabase = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='database') | first %}
+                {% set desiredSchema = desiredState.storageLocations | selectattr('name', 'equalto', name) | map(attribute='schema') | first %}
+                {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}
+
+                {% if currentDatabaseSchema != desiredDatabaseSchema %}
+                    {% set ns.sourcestorageLocationTest = false %}
+                {% endif %}
+            {% endfor %}
+
+          
+          {# Test to see if the transform in a column has changed #}
+          {% set desiredTransformArray = desiredState.sources | map(attribute='columns') | first | map(attribute='transform') | list -%}
+          {# Current Namespace Variables Transform #}
+          {% set currentTransformArray = currentState.sources | map(attribute='columns') | first | map(attribute='transform') | list -%}
+
+
+          {% set columnsTransformTest = currentTransformArray == desiredTransformArray %}
+
+
+            {#Target location Test  #}
+            {%if currentState.storageLocations|length == 0%}          
+              {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', currentState.node.location.name) | map(attribute='database') | string %}
+              {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', currentState.node.location.name) | map(attribute='schema') | string %}
+               {% set currentDatabaseSchema = currentDatabase + '.' + currentSchema %}
+               
+            {%else %}   
+            {# Current target node mappings #}
+            {% set currentDatabase = currentState.storageLocations | selectattr('name', 'equalto', currentState.node.location.name) | map(attribute='database') | first %}
+            {% set currentSchema = currentState.storageLocations | selectattr('name', 'equalto', currentState.node.location.name) | map(attribute='schema') | first %}
+            {% set currentDatabaseSchema = currentDatabase + '.' + currentSchema %}  
+			{% endif %}		 
+        
+            {# Desired target node mappings #}
+            {% set desiredDatabase = desiredState.storageLocations | selectattr('name', 'equalto', desiredState.node.location.name) | map(attribute='database') | first %}
+            {% set desiredSchema = desiredState.storageLocations | selectattr('name', 'equalto', desiredState.node.location.name) | map(attribute='schema') | first %}
+            {% set desiredDatabaseSchema = desiredDatabase + '.' + desiredSchema %}           
+            
+             {% if currentDatabaseSchema != desiredDatabaseSchema %}
+                {% set ns.storageLocationTest = false %}
+             {% endif %}
+
+		    {#Add columns#}
+            {% for addDesCol in desiredState.columns %}
+                {% if addDesCol.id not in currentState.columns | map(attribute="id") %}
+                {% set ns.colchanges = ns.colchanges + 1 %}
+                {% endif %}
+            {% endfor %}
+			
+			
+			{# Rename Columns #}
+            {% for renameCurCol in currentState.columns %}
+                {% if renameCurCol.id in desiredState.columns | map(attribute="id") %}
+                    {% set desiredColumnName = desiredState.columns | selectattr('id', 'equalto', renameCurCol.id) | map(attribute='name') | first %}
+                    {% if renameCurCol.name != desiredColumnName %}
+                        {% set ns.colchanges = ns.colchanges + 1 %}
+                    {% endif %}
+                {% endif %}
+            {% endfor %}
+
+             
+			{# Drop Columns #}
+            {% for dropCurCol in currentState.columns %}
+                {% if dropCurCol.id not in desiredState.columns | map(attribute="id") %}
+                  {% set ns.colchanges = ns.colchanges + 1 %}
+                {% endif %}
+            {% endfor %}
+	
+            {#Column level changes test#}
+			{% for alterCurCol in currentState.columns %}        
+                {% if alterCurCol.id in desiredState.columns | map(attribute="id") %}
+                     {% set currentColumnName = currentState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='name') | first %}
+                    {% set currentDescription = currentState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='description') | first %}
+                    {% set currentDatatype = currentState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='dataType') | first %}
+                    {% set currentNullable = currentState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='nullable') | first %}
+                    {% set currentDefaultValue = currentState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='defaultValue') | first %}
+                    
+                    {% set desiredColumnName = desiredState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='name') | first %}
+                    {% set desiredDescription = desiredState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='description') | first %}
+                    {% set desiredDatatype = desiredState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='dataType') | first %}
+                    {% set desiredNullable = desiredState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='nullable') | first %}
+                    {% set desiredDefaultValue = desiredState.columns | selectattr('id', "equalto", alterCurCol.id) | map(attribute='defaultValue') | first %}
+                        
+
+                   {% set datatypeTest = currentDatatype == desiredDatatype %}
+                   {% set nullableTest = currentNullable == desiredNullable %}
+                   {% set defaultValueTest = currentDefaultValue == desiredDefaultValue %}
+                   {% set descriptionTest = currentDescription == desiredDescription %}
+                   {% set columnnameTest = currentColumnName == desiredColumnName %}
+
+                    {% if (descriptionTest == false) %}
+                        {% set ns.descolchanges = ns.descolchanges + 1 %}
+                    {%endif%} 														
+                    {%if (datatypeTest == false or nullableTest == false or defaultValueTest == false or columnnameTest == false )%} 
+                       {% set ns.othercolchanges = ns.othercolchanges + 1 %}                                      
+                     {%endif%} 																										
+                {%endif%}    
+            {% endfor %}
+         
+    
+           {#config level changes #}
+		  
+		   {%set securetst = currentState.config.secureOption == desiredState.config.secureOption%}
+		   {%set chngtracktst = currentState.config.changetracking == desiredState.config.changetracking%}
+		   	{% set nodeNameTest = currentState.node.name == desiredState.node.name %}
+
+            {% if 
+            chngtracktst == false or
+            securetst == false or 
+			      ns.othercolchanges > 0 or 
+			      ns.descolchanges > 0 or 
+			      ns.colchanges > 0 or 
+			      joinTest == false or 
+			      columnsTransformTest == false or 
+            ns.sourcestorageLocationTest == false or
+             ns.storageLocationTest == false or nodeNameTest == false%}    
+            {% set ns.createTst = true %}
+          {% else %}
+            {% set ns.createTst = false %}
+         {% endif %}      		 
+           
+           {# Figure out refresh schedule #}
+        
+         {% if currentState.config.schedulerefresh == true and desiredState.config.schedulerefresh == false %}
+		     {%set ns.scheduleref='DROP'%}
+             {%elif currentState.config.schedulerefresh == false and desiredState.config.schedulerefresh == true%}  
+              {%set ns.scheduleref='ADD'%}  
+	         {%elif currentState.config.schedulerefresh == true and desiredState.config.schedulerefresh == true%}
+
+             {%if currentState.config.CRON !=desiredState.config.CRON or (currentState.config.tp !=desiredState.config.tp) or (currentState.config.tph !=desiredState.config.tph) %}
+                        {%set ns.scheduleref='ALTER'%}
+             {%endif%} 				
+        
+         {% endif %}
+
+          {%if ns.createTst == false and ns.scheduleref != ""  %}    
+           {%set ns.alterTest = true %}		   
+	     {%endif%}
+    {%endif%}
+
+  {%if currentState == undefined  or ns.createTst == true%}
+       
+       
+	 {%if desiredState.config.infermvstruct == true %}
+
+      {{ stage('CREATE MATERIALIZED VIEW') }}
+
+      CREATE OR REPLACE MATERIALIZED VIEW {{ ref_no_link(desiredState.node.location.name, desiredState.node.name) }} 
+     AS
+     SELECT 
+     {%- for col in desiredState.sources[0].columns %}
+       {%- if col.transform == "" %}
+        `{{ col.name }}`
+       {%- else %}
+        {{ get_source_transform(col) }} AS `{{ col.name }}`
+       {%- endif %}
+      {%- if not loop.last -%}, {%- endif -%}
+     {%- endfor %}
+     FROM 
+     (`{{ db }}`.`{{ sch }}`.`{{ desiredState.sources[0].dependencies[0].node.name }}`)
+    {{ get_clause_new(join_clause) }} 
+    
+   {%else%}
+     {# Partition by clause #}
+
+      {%if desiredState.config.partclause == true%}
+
+       {% set column = desiredState.config.partitionclause.get('items') | map(attribute='partname.name')| list%}
+	 
+	      {% for r in column %}
+			   {% set ns.partValues = ns.partValues + r %}
+         {%- if not loop.last -%} {% set ns.partValues = ns.partValues +','%} {% endif %}
+        {% endfor %}
+       
+         {% set ns.partValues = 'PARTITIONED BY(' + ns.partValues + ')' %} 
+      {%endif%}
+
+     # Primary key clause
+
+      {%if desiredState.config.primary == true%}
+
+        {% set column = desiredState.config.primarykeycon.get('items') | map(attribute='primarykey.name')| list%}
+   
+	 
+	      {% for r in column %}
+			   {% set ns.primarykeyValues = ns.primarykeyValues +r %}
+         {%- if not loop.last -%} {% set ns.primarykeyValues = ns.primarykeyValues +','%} {% endif %}
+        {% endfor %}
+       
+         {% set ns.primarykeyValues = 'CONSTRAINT ' + desiredState.config.primarykeyname + ' PRIMARY KEY ('+ns.primarykeyValues +')' %}
+
+      {%endif%}
+
+     #Foreign key clause
+
+      {#Foreign key clause#}
+
+      {%if desiredState.config.foreignk == true%}
+      {% set fname,foreigncolumns,parenttable = desiredState.config.foreignkeycon.get('items') | map(attribute='foreignkeyname')| list,desiredState.config.foreignkeycon.get('items') | map(attribute='foreignkeycol')| list,desiredState.config.foreignkeycon.get('items') | map(attribute='parentabname')| list%}
+
+	      {% for r in fname %}
+			   
+                {% set ns.foreignkeyValues = ns.foreignkeyValues +'CONSTRAINT ' + r + ' FOREIGN KEY ('+ foreigncolumns[loop.index0] +')' + ' REFERENCES '+ parenttable[loop.index0] %}
+         {%- if not loop.last -%} {% set ns.foreignkeyValues = ns.foreignkeyValues + ' , '%} {% endif %}
+        {% endfor %}              
+     {%endif%}
+
+     #Other constraints
+
+
+      {%if desiredState.config.constraints == true%}
+	
+	       {% set column, expression,violation = desiredState.config.constraintsspec.get('items') | map(attribute='columnName.name')| list, desiredState.config.constraintsspec.get('items') | map(attribute='sqlExpression') | list ,
+	      desiredState.config.constraintsspec.get('items') | map(attribute='onviolation') | list%}
+
+	     
+	        {% for r in column %}
+	
+			      {%set ns.oconstraints = ns.oconstraints + 'CONSTRAINT ' + r + ' EXPECT('+ expression[loop.index0] + ') ON VIOLATION ' + violation[loop.index0] %}
+           {% if not loop.last %}
+            {%set ns.oconstraints = ns.oconstraints +',' %}
+           {% endif %}                
+         {% endfor %}
+	    {%endif%}
+
+
+
+       {# CreateSQL for Materialized view #}
+
+       {{ stage('CREATE MATERIALIZED VIEW') }}
+
+      CREATE OR REPLACE MATERIALIZED VIEW  {{ ref_no_link(desiredState.node.location.name, desiredState.node.name) }}
+      (
+        {%- for col in desiredState.sources[0].columns %}
+            `{{ col.name }}` {{ col.dataType }}
+            {%- if not col.nullable %} NOT NULL
+            {%- endif %}
+            {%- if col.description | length > 0 %} COMMENT '{{ col.description | escape }}'{%- endif %}
+            {%- if not loop.last %}, {%- endif %}
+            {%-if loop.last and (desiredState.config.foreign == true or desiredState.config.primary == true) -%},{%-endif%}
+        {%- endfor %}
+        {% if desiredState.config.primary == true%} {{ns.primarykeyValues}}{%if desiredState.config.foreign == true -%},{%endif%}{%endif%}
+        {%-if desiredState.config.foreignk == true%}{{ns.foreignkeyValues}}{%-endif%}
+        {%-if desiredState.config.constraints == true%}{{ns.oconstraints}}{%-endif%}  )  
+         {% if desiredState.node.description | length > 0 %} COMMENT '{{ desiredState.node.description |escape }}'{%endif%}
+         {%- if desiredState.config.partclause == true %} {{ ns.partValues }} {%-endif%}
+         {%- if desiredState.config.tblproperties != ""-%}TBLPROPERTIES ({{desiredState.config.tblproperties}}){%-endif%}
+         {%-if desiredState.config.schedulerefresh == true%}SCHEDULE REFRESH {% if desiredState.config.schedulePeriodOption =='CRON'%}  CRON '{{desiredState.config.cron}}' {%if desiredState.config.crontz !="" %} AT TIME ZONE '{{desiredState.config.crontz}}' {%endif%}{%endif%}
+         {%-if desiredState.config.schedulePeriodOption !='CRON' and desiredState.config.tp == 'EVERY HOURS' %}
+         EVERY {{desiredState.config.tph}} HOURS
+         {%-elif desiredState.config.schedulePeriodOption !='CRON' and desiredState.config.tp == 'EVERY DAYS' %}
+         EVERY {{desiredState.config.tph}} DAYS
+         {%-elif desiredState.config.schedulePeriodOption !='CRON' and desiredState.config.tp == 'EVERY WEEKS' %}
+         EVERY {{desiredState.config.tph}} WEEKS   
+         {%- endif%}
+         {%- endif%}
+        AS
+        SELECT 
+        {% for col in desiredState.sources[0].columns %}
+            {%-if col.transform == "" %}
+                `{{col.name}}`
+            {%-else-%}
+                 {{ get_source_transform(col) }} AS `{{ col.name }}`
+            {%-endif-%}
+            {%- if not loop.last -%}, {% endif %}
+       {%- endfor %}
+        FROM
+        (`{{db}}`.`{{sch}}`.`{{desiredState.sources[0].dependencies[0].node.name}}`)
+         {{ get_clause_new(join_clause) }}
+
+   {%endif%} 
+ {%endif%}
+     {%if ns.alterTest == true %}
+         
+       {{ stage('Alter schedule refresh', true, "sql", "alter") }}
+                {% set srcSchName = currentState.node.location.name %}
+                {% set cdb = currentState.storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='database') | first %}
+                {% set csch = currentState.storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='schema') | first %}
+
+               {%if ns.scheduleref == 'DROP'%}
+                 ALTER MATERIALIZED VIEW  `{{cdb}}`.`{{csch}}`.`{{desiredState.node.name}}` {{ns.scheduleref}} SCHEDULE
+
+               {%else%}
+                ALTER MATERIALIZED VIEW  `{{cdb}}`.`{{csch}}`.`{{desiredState.node.name}}`
+                {{ns.scheduleref}}  {%if desiredState.config.schedulerefresh == true-%} SCHEDULE REFRESH {% if desiredState.config.schedulePeriodOption =='CRON'%}  CRON '{{desiredState.config.cron}}' {%if desiredState.config.crontz !="" %} AT TIME ZONE '{{desiredState.config.crontz}}' {%endif%}{%endif%}
+                {%- if desiredState.config.schedulePeriodOption != 'CRON' -%}
+                   {%- if desiredState.config.tp == 'EVERY HOURS' -%}
+                      EVERY {{ desiredState.config.tph }} HOURS
+                   {%- elif desiredState.config.tp == 'EVERY DAYS' -%}
+                       EVERY {{ desiredState.config.tph }} DAYS
+                   {%- elif desiredState.config.tp == 'EVERY WEEKS' -%}
+                       EVERY {{ desiredState.config.tph }} WEEKS
+                   {%- endif %}
+                {%- endif %}
+               {%endif%} 
+            {%endif%}           
+    {%endif%}
+{%endif%}

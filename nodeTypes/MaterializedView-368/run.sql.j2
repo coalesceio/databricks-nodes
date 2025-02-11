@@ -1,0 +1,17 @@
+{% set srcSchName = node.location.name %}
+{% set cdb = storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='database') | first %}
+{% set csch = storageLocations | selectattr('name', 'equalto', srcSchName) | map(attribute='schema') | first %}
+
+{% if config.schedulerefresh == false %}
+
+{{ stage('Refresh-MV') }}
+
+   REFRESH MATERIALIZED VIEW   `{{cdb}}`.`{{csch}}`.`{{node.name}}`
+
+{% else %}
+
+{{ stage('Schedule refesh Enabled - Nothing to do.') }}
+   
+    select 1 = 0
+	
+{% endif %}

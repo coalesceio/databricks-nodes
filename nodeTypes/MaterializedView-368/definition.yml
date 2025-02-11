@@ -1,0 +1,192 @@
+fileVersion: 1
+id: "368"
+isDisabled: false
+metadata:
+  defaultStorageLocation: null
+  error: null
+  nodeMetadataSpec: |+
+    capitalized: materialized view
+    short: MV
+    plural: Materialized Views
+    tagColor: '#35D491'
+
+    deployStrategy: advanced
+    isColumnResyncEnabled: true
+
+
+    config:
+        - groupName: General options
+          items:
+
+          - displayName: Infer MV structure
+            attributeName: infermvstruct
+            type: toggleButton
+          
+          - displayName: Schedule refresh
+            attributeName: schedulerefresh
+            type: toggleButton
+            enableIf: "{% if (config.infermvstruct) %} false {% else %} true {% endif %}"
+
+        - groupName: Materialized View Options
+          enableIf: "{% if (config.infermvstruct) %} false {% else %} true {% endif %}"
+          items:
+          
+          - displayName: Table properties
+            attributeName: tblproperties
+            type: textBox
+            
+          
+          - type: toggleButton
+            displayName: Partition by 
+            attributeName: partclause
+
+          - type: tabular
+            displayName: Partition by
+            attributeName: partitionclause
+            columns:
+
+            -  type: columnDropdownSelector
+               displayName: Partition by
+               attributeName: partname
+               isRequired: false
+            isRequired: false
+            enableIf: "{% if (config.partclause) %} true {% else %} false {% endif %}"
+          
+          - type: toggleButton
+            displayName: Table Constraints
+            attributeName: tableconstraints
+            default: false
+            
+          - type: toggleButton
+            displayName: Primary key
+            attributeName: primary
+            enableIf: "{% if (config.tableconstraints) %} true {% else %} false {% endif %}"
+
+          - type: textBox
+            displayName: Primary key Name
+            attributeName: primarykeyname
+            enableIf: "{% if (config.tableconstraints and config.primary) %} true {% else %} false {% endif %}"
+
+          - type: tabular   
+            displayName: Primary key columns
+            attributeName: primarykeycon
+            columns:
+
+            -  type: columnDropdownSelector
+               displayName: Columns
+               attributeName: primarykey
+
+            isRequired: false
+            enableIf: "{% if (config.tableconstraints and config.primary) %} true {% else %} false {% endif %}"
+
+          - type: toggleButton
+            displayName: Foreign key
+            attributeName: foreignk
+            enableIf: "{% if (config.tableconstraints) %} true {% else %} false {% endif %}"
+
+          - type: tabular   
+            displayName: Foreign key attributes
+            attributeName: foreignkeycon
+            columns:
+
+            - type: textBox
+              displayName: Foreign key Name
+              attributeName: foreignkeyname
+              enableIf: "{% if (config.tableconstraints and config.foreignk) %} true {% else %} false {% endif %}"
+
+            - type: textBox
+              displayName: Parent table name
+              attributeName: parentabname
+              default: "ex:`<database>`.`<schema>`.`<tablename>`"
+              enableIf: "{% if (config.tableconstraints and config.foreignk) %} true {% else %} false {% endif %}"
+
+            - type: textBox
+              displayName: Foreign key columns
+              attributeName: foreignkeycol
+          
+            isRequired: false
+            enableIf: "{% if (config.tableconstraints and config.foreignk ) %} true {% else %} false {% endif %}"
+          
+          - type: toggleButton
+            attributeName: constraints
+            displayName: Other constraints
+            default: false
+            isRequired: false
+            
+
+
+          - type: tabular
+            displayName: 'Constraints'
+            attributeName: constraintsspec
+            columns:
+
+            -  type: columnDropdownSelector
+               displayName: ColumnName
+               attributeName: columnName
+               isRequired: false
+          
+            -  type: textBox
+               displayName: Expected Expression
+               attributeName: sqlExpression
+               default: "ex:<column_name> IS NOT NULL"
+               isRequired: false
+            
+            -  type: dropdownSelector
+               displayName: ON VIOLATION
+               attributeName: onviolation
+               default: DROP ROW
+               options:
+               - FAIL UPDATE
+               - DROP ROW 
+          
+            isRequired: false
+            enableIf: "{% if config.constraints %} true {% else %} false {% endif %}"
+
+        - groupName: Schedule Options
+          enableIf: "{% if (config.schedulerefresh ) %} true {% else %} false {% endif %}"
+          items:
+
+          - displayName: Task Schedule
+            attributeName: schedulePeriodOption
+            type: dropdownSelector
+            options:
+            - Periodic schedule
+            - CRON
+      
+          - displayName: CRON string
+            attributeName: cron
+            type: textBox
+            enableIf: "{% if (config.schedulePeriodOption =='CRON' ) %} true {% else %} false {% endif %}"
+
+          - displayName: CRON TIME ZONE
+            attributeName: crontz
+            type: textBox
+            enableIf: "{% if (config.schedulePeriodOption =='CRON' ) %} true {% else %} false {% endif %}"
+          
+          - displayName: Schedule refesh-time period
+            attributeName: tp
+            options:
+            - EVERY HOURS
+            - EVERY DAYS
+            - EVERY WEEKS
+            type: dropdownSelector
+            enableIf: "{% if (config.schedulePeriodOption == 'Periodic schedule' and config.schedulePeriodOption !='CRON') %} true {% else %} false {% endif %}"
+
+          - displayName: Specific interval of periodic refresh(integer value)
+            type: label
+            enableIf: "{% if (config.schedulePeriodOption == 'Periodic schedule' and config.schedulePeriodOption !='CRON') %} true {% else %} false {% endif %}"
+
+
+          - displayName: HOUR OR HOURS 1 <= H <= 72  
+                         DAY  OR DAYS 1<= D <= 31
+                         WEEK OR WEEKS 1 <= W <= 8
+            attributeName: tph
+            type: textBox
+            enableIf: "{% if (config.schedulePeriodOption == 'Periodic schedule' and config.schedulePeriodOption !='CRON') %} true {% else %} false {% endif %}"
+
+          
+          
+
+
+name: Materialized View
+type: NodeType
