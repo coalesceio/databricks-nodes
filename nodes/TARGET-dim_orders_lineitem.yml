@@ -18,7 +18,7 @@ operation:
   deployEnabled: true
   description: TYPE1-dimension
   isMultisource: false
-  locationName: SOURCE
+  locationName: TARGET
   materializationType: table
   metadata:
     appliedNodeTests: []
@@ -31,7 +31,7 @@ operation:
           columnCounter: 311ef3e4-9ec1-4acd-8e16-81b67bcee43c
           stepCounter: 7e1e8b9a-7ed4-4d74-8f38-ded3e20eb7b0
         config: {}
-        dataType: NUMBER
+        dataType: BIGINT
         defaultValue: ""
         description: Dimesnion key
         isSurrogateKey: true
@@ -399,7 +399,7 @@ operation:
           columnCounter: c7b3246d-0a67-4575-ba25-e761b9f92455
           stepCounter: 7e1e8b9a-7ed4-4d74-8f38-ded3e20eb7b0
         config: {}
-        dataType: NUMBER
+        dataType: INT
         defaultValue: ""
         description: ""
         isSystemVersion: true
@@ -416,7 +416,7 @@ operation:
           columnCounter: 0fe7e51d-65cf-4d7d-b403-eb9c64c761e0
           stepCounter: 7e1e8b9a-7ed4-4d74-8f38-ded3e20eb7b0
         config: {}
-        dataType: VARCHAR
+        dataType: VARCHAR(1)
         defaultValue: ""
         description: ""
         isSystemCurrentFlag: true

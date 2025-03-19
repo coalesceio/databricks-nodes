@@ -117,13 +117,13 @@ metadata:
 
     - displayName: SYSTEM_VERSION
       transform: ''
-      dataType: NUMBER
+      dataType: INT
       placement: end
       attributeName: isSystemVersion
 
     - displayName: SYSTEM_CURRENT_FLAG
       transform: ''
-      dataType: VARCHAR
+      dataType: VARCHAR(1)
       placement: end
       attributeName: isSystemCurrentFlag
 
