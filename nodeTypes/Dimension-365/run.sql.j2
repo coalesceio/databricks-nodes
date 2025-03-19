@@ -228,7 +228,7 @@ does not permit copying or modification for any other purpose.
                   {% if not loop.first %}
                       AND
                   {% endif %}
-                  {{ get_source_transform(col, quoteChar) }} = `DIM`.`{{ col.name }}`
+                  {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
               {% endfor %} )
               
               {% for col in source.columns if not (   col.isBusinessKey or
