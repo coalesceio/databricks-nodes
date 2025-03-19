@@ -1,5 +1,14 @@
 fileVersion: 1
 id: "370"
-mappingDefinitions: {}
+mappingDefinitions:
+  FEDS:
+    database: coalesce
+    schema: target_dev
+  SOURCE:
+    database: coalesce
+    schema: sample_data
+  TARGET:
+    database: coalesce
+    schema: target_dep
 name: QA
 type: Environment

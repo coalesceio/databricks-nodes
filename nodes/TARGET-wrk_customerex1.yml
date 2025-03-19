@@ -1,6 +1,6 @@
 fileVersion: 1
-id: a045289f-b655-4332-82cd-83ed15c594eb
-name: WRK_customer
+id: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
+name: wrk_customerex1
 operation:
   config:
     groupByAll: false
@@ -11,7 +11,7 @@ operation:
         - {}
     postSQL: ""
     preSQL: ""
-    selectDistinct: true
+    selectDistinct: false
     testsEnabled: false
     truncateBefore: true
   database: ""
@@ -19,14 +19,14 @@ operation:
   description: ""
   isMultisource: false
   locationName: TARGET
-  materializationType: view
+  materializationType: table
   metadata:
     appliedNodeTests: []
     columns:
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 3abde2ce-79c9-41ed-bfe3-7fa1985ddc34
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 7c718be7-c936-4d2e-a532-9e5da9cec02c
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: LONG
         description: ""
@@ -39,8 +39,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 9495bb57-4f79-40cb-a6d9-2170418c1d3c
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 8456fa98-030e-4b38-8f08-45cf2ddfa648
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: STRING
         description: ""
@@ -53,8 +53,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 5274e367-154b-4a2d-9c00-3883dd4fdd99
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: f29fe9f7-0323-4b80-ac28-9547b50f60a8
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: STRING
         description: ""
@@ -67,8 +67,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: d11f47d7-afae-42fb-815e-1644ee191495
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: bd536422-7fb5-4f2e-98ad-de6534357b5e
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: LONG
         description: ""
@@ -81,8 +81,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 72eb8161-d1b8-41b4-996f-9bea56a7a826
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: c05bce80-f505-4b7c-8e73-b5a29b3611aa
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: STRING
         description: ""
@@ -95,8 +95,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 04767194-48cd-464c-8aa3-f864d9ccdd4e
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: b7e264ba-2928-4101-9ea9-5d150a68ca30
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: DECIMAL
         description: ""
@@ -109,8 +109,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 7fa4ceaa-b084-4a34-b242-1794b22ecbaa
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 00c72c9f-6b7a-4cd2-b379-298ace7321ee
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: STRING
         description: ""
@@ -123,8 +123,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: efc7b90d-4a31-497f-9e87-15e2e69fdf23
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 2c955be1-d8ae-4da0-b5fc-333211ff884b
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
         config: {}
         dataType: STRING
         description: ""
@@ -135,23 +135,65 @@ operation:
               - columnCounter: 8bac3570-4bd7-41b3-a349-f9e2a2cb8cc6
                 stepCounter: b2ccf82d-d235-4482-b7c8-17f0ca5e8a0e
             transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 1ce26314-5ad5-4658-8422-533b42ff0971
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        hashDetails:
+          hashAlgorithm: SHA1
+        hashedColumns:
+          - columnCounter: f29fe9f7-0323-4b80-ac28-9547b50f60a8
+            stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
+        name: GH
+        nullable: true
+        sourceColumnReferences: []
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 15c56c06-7e1d-4c68-8a92-741861280fb7
+          stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
+        config: {}
+        dataType: date
+        defaultValue: ""
+        description: ""
+        keyColumnType: None
+        name: datetim
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: current_date()
+        systemColumnType: None
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
-      - aliases: {}
+      - aliases:
+          customer: b2ccf82d-d235-4482-b7c8-17f0ca5e8a0e
         customSQL:
           customSQL: ""
         dependencies:
           - locationName: SOURCE
             nodeName: customer
         join:
-          joinCondition: FROM {{ ref('SOURCE', 'customer') }} `customer`
-        name: WRK_customer
+          joinCondition: |-
+            FROM {{ ref('SOURCE', 'customer') }} `customer`
+            where `customer`.`c_custkey`< 40
+        name: wrk_customerex1
         noLinkRefs: []
-  name: WRK_customer
+  name: wrk_customerex1
   overrideSQL: false
   schema: ""
-  sqlType: Stage
+  sqlType: "363"
   type: sql
   version: 1
 type: Node

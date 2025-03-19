@@ -49,7 +49,7 @@ does not permit copying or modification for any other purpose.
             {%- if not loop.last -%}, {% endif %}
         {% endfor %}
     )
-    {%- if node.description | length > 0 %} COMMENT = '{{ node.description | escape }}'{% endif %}
+    {%- if node.description | length > 0 %} COMMENT  '{{ node.description | escape }}'{% endif %}
     AS
     {% for source in sources %}
         SELECT
@@ -57,7 +57,7 @@ does not permit copying or modification for any other purpose.
         DISTINCT
         {% endif %}
         {% for col in source.columns %}
-            {{ get_source_transform(col, quoteChar='`') }} AS `{{ col.name }}`
+            {{ get_source_transform(col) }} AS `{{ col.name }}`
             {%- if not loop.last -%}, {% endif %}
         {% endfor %}
 

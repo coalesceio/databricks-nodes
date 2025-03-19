@@ -1,6 +1,6 @@
 fileVersion: 1
-id: a045289f-b655-4332-82cd-83ed15c594eb
-name: WRK_customer
+id: fc55d234-76bf-49df-96a5-cb5c7040908e
+name: wrk_customer_vw
 operation:
   config:
     groupByAll: false
@@ -16,7 +16,7 @@ operation:
     truncateBefore: true
   database: ""
   deployEnabled: true
-  description: ""
+  description: Databricks-Work view
   isMultisource: false
   locationName: TARGET
   materializationType: view
@@ -25,8 +25,8 @@ operation:
     columns:
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 3abde2ce-79c9-41ed-bfe3-7fa1985ddc34
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 6893aa0e-b227-4e78-bdbe-535b2534bd49
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: LONG
         description: ""
@@ -39,8 +39,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 9495bb57-4f79-40cb-a6d9-2170418c1d3c
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: f785a52e-36cf-40c0-a377-2bdb7abf6715
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: STRING
         description: ""
@@ -53,8 +53,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 5274e367-154b-4a2d-9c00-3883dd4fdd99
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 4f75d551-ea10-452a-a789-386e3c0ec0ef
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: STRING
         description: ""
@@ -67,8 +67,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: d11f47d7-afae-42fb-815e-1644ee191495
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 83fe4860-b816-44b3-ac22-7611c3345dff
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: LONG
         description: ""
@@ -81,8 +81,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 72eb8161-d1b8-41b4-996f-9bea56a7a826
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 2c7a7efe-bf18-4b47-b1c0-b78b53d2e542
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: STRING
         description: ""
@@ -95,8 +95,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 04767194-48cd-464c-8aa3-f864d9ccdd4e
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 2de4017b-070c-44bb-b39c-180b65150c9a
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: DECIMAL
         description: ""
@@ -109,8 +109,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 7fa4ceaa-b084-4a34-b242-1794b22ecbaa
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: a0e56daf-b358-4613-a742-ed6da5e3a43a
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: STRING
         description: ""
@@ -123,8 +123,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: efc7b90d-4a31-497f-9e87-15e2e69fdf23
-          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+          columnCounter: 1cd02afc-917b-44c5-a1e3-488adea4d6e7
+          stepCounter: fc55d234-76bf-49df-96a5-cb5c7040908e
         config: {}
         dataType: STRING
         description: ""
@@ -140,18 +140,31 @@ operation:
     sourceMapping:
       - aliases: {}
         customSQL:
-          customSQL: ""
+          customSQL: |-
+            {{ stage('Override Create SQL') }}
+            	CREATE OR REPLACE VIEW {{ ref('SOURCE', 'wrk_customer_vw')}} AS (
+            		SELECT 
+             "c_custkey" AS "c_custkey",
+             "c_name" AS "c_name",
+             "c_address" AS "c_address",
+             "c_nationkey" AS "c_nationkey",
+             "c_phone" AS "c_phone",
+             "c_acctbal" AS "c_acctbal",
+             "c_mktsegment" AS "c_mktsegment",
+             "c_comment" AS "c_comment"
+             FROM {{ ref('SOURCE', 'customer') }}
+            	)
         dependencies:
           - locationName: SOURCE
             nodeName: customer
         join:
           joinCondition: FROM {{ ref('SOURCE', 'customer') }} `customer`
-        name: WRK_customer
+        name: wrk_customer_vw
         noLinkRefs: []
-  name: WRK_customer
+  name: wrk_customer_vw
   overrideSQL: false
   schema: ""
-  sqlType: Stage
+  sqlType: "363"
   type: sql
   version: 1
 type: Node
