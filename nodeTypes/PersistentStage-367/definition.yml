@@ -103,14 +103,11 @@ metadata:
         isRequired: false
         enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
 
-
-
-
     systemColumns:
 
     - displayName: '{{NODE_NAME}}_KEY'
       transform: ''
-      dataType: NUMBER
+      dataType: BIGINT
       placement: beginning
       attributeName: isSurrogateKey
 

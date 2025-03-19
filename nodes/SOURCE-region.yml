@@ -1,0 +1,67 @@
+fileVersion: 1
+id: 9a20905f-1cc5-4feb-9df7-2d43de97cff9
+name: region
+operation:
+  database: ""
+  deployEnabled: true
+  description: ""
+  locationName: SOURCE
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 2305eea5-991e-44bd-b36f-b022402a547d
+          stepCounter: 9a20905f-1cc5-4feb-9df7-2d43de97cff9
+        config: {}
+        dataType: LONG
+        defaultValue: ""
+        description: ""
+        name: r_regionkey
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: d0cfaf3d-3a67-4cee-b558-92c34b0b0e0f
+          stepCounter: 9a20905f-1cc5-4feb-9df7-2d43de97cff9
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: r_name
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9fe4170f-6c2c-499d-b64d-50a51b2c6a1c
+          stepCounter: 9a20905f-1cc5-4feb-9df7-2d43de97cff9
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: r_comment
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+  name: region
+  schema: ""
+  sqlType: Source
+  type: sourceInput
+  version: 1
+type: Node
