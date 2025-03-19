@@ -64,7 +64,7 @@ does not permit copying or modification for any other purpose.
                 {% elif col.isSystemCurrentFlag %}
                     'Y'
                 {% else %}
-                   {{ get_source_transform(col, quoteChar='`') }}
+                   {{ get_source_transform(col) }}
                 {% endif %}
                 AS `{{ col.name }}`,
             {% endfor %}
@@ -75,7 +75,7 @@ does not permit copying or modification for any other purpose.
                 {% if not loop.first %}
                     AND
                 {% endif %}
-                    {{ get_source_transform(col, quoteChar='`') }} = `DIM`.`{{ col.name }}`
+                    {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
             {% endfor %}
             WHERE
             {% for col in source.columns if col.isBusinessKey -%}
@@ -104,7 +104,7 @@ does not permit copying or modification for any other purpose.
                 {% elif col.isSystemCurrentFlag %}
                     'Y'
                 {% else %}
-                   {{ get_source_transform(col, quoteChar='`') }}
+                   {{ get_source_transform(col) }}
                 {% endif %}
                 AS `{{ col.name }}`,
             {% endfor %}
@@ -115,7 +115,7 @@ does not permit copying or modification for any other purpose.
                 {% if not loop.first %}
                     AND
                 {% endif %}
-                {{ get_source_transform(col, quoteChar='`') }} = `DIM`.`{{ col.name }}`
+                {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
             {% endfor %}
             WHERE `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` = 'Y'
             {% for col in source.columns if (col.isChangeTracking == true) %}
@@ -124,7 +124,7 @@ does not permit copying or modification for any other purpose.
                 {% else %}
                     OR
                 {% endif %}
-                ( NVL( CAST({{ get_source_transform(col, quoteChar='`') }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )
+                ( NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )
                 {% if loop.last %}
                     )
                 {% endif %}
@@ -160,7 +160,7 @@ does not permit copying or modification for any other purpose.
                 {% if not loop.first %}
                     AND
                 {% endif %}
-                {{ get_source_transform(col, quoteChar='`') }} = `DIM`.`{{ col.name }}`
+                {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
             {% endfor %}
             WHERE `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` = 'Y'
             {% for col in source.columns if (col.isChangeTracking == true) %}
@@ -169,7 +169,7 @@ does not permit copying or modification for any other purpose.
                 {% else %}
                     OR
                 {% endif %}
-                ( NVL( CAST({{ get_source_transform(col, quoteChar='`') }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )
+                ( NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )
                 {% if loop.last %}
                     )
                 {% endif %}
@@ -209,7 +209,7 @@ does not permit copying or modification for any other purpose.
                   {% elif col.isSystemCurrentFlag %}
                       'Y'
                   {% else %}
-                      {{ get_source_transform(col, quoteChar='`') }}
+                      {{ get_source_transform(col) }}
                   {% endif %}
                   AS `{{ col.name }}`,
               {% endfor -%}
@@ -220,7 +220,7 @@ does not permit copying or modification for any other purpose.
                   {% if not loop.first %}
                       AND
                   {% endif %}
-                  {{ get_source_transform(col, quoteChar='`') }} = `DIM`.`{{ col.name }}`
+                  {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
               {% endfor %}
               WHERE `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` = 'Y'
               AND (
@@ -228,7 +228,7 @@ does not permit copying or modification for any other purpose.
                   {% if not loop.first %}
                       AND
                   {% endif %}
-                  {{ get_source_transform(col, quoteChar='`') }} = `DIM`.`{{ col.name }}`
+                  {{ get_source_transform(col, quoteChar) }} = `DIM`.`{{ col.name }}`
               {% endfor %} )
               
               {% for col in source.columns if not (   col.isBusinessKey or
@@ -246,7 +246,7 @@ does not permit copying or modification for any other purpose.
                   {% if not loop.first %}
                       OR
                   {% endif %}
-                  NVL( CAST({{ get_source_transform(col, quoteChar='`') }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**')
+                  NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**')
                   {% if loop.last %}
                       )
                   {% endif %}
@@ -309,7 +309,7 @@ does not permit copying or modification for any other purpose.
                     {% elif col.isSystemCurrentFlag %}
                     	'Y'
                     {% else %}
-                        {{ get_source_transform(col, quoteChar='`') }}
+                        {{ get_source_transform(col) }}
                     {% endif %}
                     AS `{{ col.name }}`
                     {%- if not loop.last %}, {% endif %}
