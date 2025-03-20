@@ -5,20 +5,23 @@ operation:
   config:
     groupByAll: false
     insertStrategy: UNION ALL
-    orderby: false
+    orderby: true
     orderbycolumn:
       items:
-        - {}
+        - sortColName:
+            columnCounter: 9bb90ee6-1d4c-46ea-865e-28eeff91176c
+            stepCounter: 56c9ed19-6305-4520-9aa6-793b4f9f6790
+          sortOrder: desc
     postSQL: ""
     preSQL: ""
-    selectDistinct: false
+    selectDistinct: true
     testsEnabled: false
-    truncateBefore: false
+    truncateBefore: true
   database: ""
   deployEnabled: true
-  description: ""
+  description: Persistent stage TYPE-1
   isMultisource: false
-  locationName: SOURCE
+  locationName: TARGET
   materializationType: table
   metadata:
     appliedNodeTests: []
@@ -47,6 +50,7 @@ operation:
         config: {}
         dataType: LONG
         description: ""
+        isBusinessKey: true
         name: n_nationkey
         nullable: true
         sourceColumnReferences:
@@ -201,14 +205,17 @@ operation:
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
-      - aliases: {}
+      - aliases:
+          nation: 18260472-da16-4d35-9bcb-674407d7239f
         customSQL:
           customSQL: ""
         dependencies:
           - locationName: SOURCE
             nodeName: nation
         join:
-          joinCondition: FROM {{ ref('SOURCE', 'nation') }} `nation`
+          joinCondition: |-
+            FROM {{ ref('SOURCE', 'nation') }} `nation`
+            where `nation`.`n_nationkey` > 4
         name: pstg_nation
         noLinkRefs: []
   name: pstg_nation
