@@ -5,14 +5,17 @@ operation:
   config:
     groupByAll: false
     insertStrategy: UNION ALL
-    orderby: false
+    orderby: true
     orderbycolumn:
       items:
-        - {}
+        - sortColName:
+            columnCounter: 5ec7d005-f8b4-4d38-bf59-53d6f5d518a7
+            stepCounter: 7e1e8b9a-7ed4-4d74-8f38-ded3e20eb7b0
+          sortOrder: desc
     postSQL: ""
     preSQL: ""
     selectDistinct: true
-    testsEnabled: false
+    testsEnabled: true
     truncateBefore: false
   database: ""
   deployEnabled: true
@@ -21,7 +24,14 @@ operation:
   locationName: TARGET
   materializationType: table
   metadata:
-    appliedNodeTests: []
+    appliedNodeTests:
+      - continueOnFailure: true
+        description: ""
+        name: Test
+        runOrder: After
+        templateString: |-
+          select * from `coalesce`.`target_de`.`dim_orders_lineitem` where 
+          `o_orderkey` <0
     columns:
       - acceptedValues:
           strictMatch: true
@@ -511,6 +521,7 @@ operation:
             FROM {{ ref('SOURCE', 'orders') }} `orders`
             INNER JOIN {{ ref('SOURCE', 'lineitem') }} `lineitem`
             ON `orders`.`o_orderkey` = `lineitem`.`l_orderkey`
+            where `orders`.`o_orderkey` >45
         name: dim_orders_lineitem
         noLinkRefs: []
   name: dim_orders_lineitem

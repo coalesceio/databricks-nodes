@@ -8,10 +8,8 @@ operation:
     orderby: true
     orderbycolumn:
       items:
-        - sortColName:
-            columnCounter: bd536422-7fb5-4f2e-98ad-de6534357b5e
-            stepCounter: 5d4f3915-300c-4ff5-90c7-4e6e20f7b2de
-          sortOrder: desc
+        - sortColName: null
+          sortOrder: null
     postSQL: ""
     preSQL: ""
     selectDistinct: true
