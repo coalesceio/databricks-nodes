@@ -13,7 +13,7 @@ The Coalesce Base Node Types Package includes:
 
 ## Work
 
-The Coalesce work node is a versatile node that allows you to develop and deploy a Work table/view in Snowflake.
+The Coalesce work node is a versatile node that allows you to develop and deploy a Work table/view in Databricks.
 
 A Work node serves as an intermediary object and is commonly employed to store raw data before undergoing the crucial phases of transformation and loading into the main tables of the data warehouse.
 
@@ -148,7 +148,7 @@ This is executed in two stages:
 | **Stage** | **Description** |
 |-----------|----------------|
 | **Delete Table** | Coalesce Internal table is dropped |
-| **Delete Table** | Target table in Snowflake is dropped |
+| **Delete Table** | Target table in Databricks is dropped |
 
 If a Work Node of materialization type view is deleted from a Workspace, that Workspace is committed to Git and that commit deployed to a higher level environment then the WorkView in the target environment will be dropped.
 
@@ -278,7 +278,7 @@ This is executed in two stages:
 
 The Coalesce Dimension UDN is a versatile node that allows you to develop and deploy a Dimension table in Snowflake.
 
-A dimension table or dimension entity is a table or entity in a star, snowflake, or starflake schema that stores details about the facts. Dimension tables describe the different aspects of a business process.
+A dimension table or dimension entity is a table or entity in a star, Snowflake, or starflake schema that stores details about the facts. Dimension tables describe the different aspects of a business process.
 
 ### Dimension Node Configuration
 
@@ -405,7 +405,7 @@ This is executed in two stages:
 | **Stage** | **Description** |
 |-----------|----------------|
 | **Delete Table** | Coalesce Internal table is dropped |
-| **Delete Table** | Target table in Snowflake is dropped |
+| **Delete Table** | Target table in Databricks is dropped |
 
 If a Dimension Node of materialization type view is deleted from a Workspace, that Workspace is committed to Git and that commit deployed to a higher level environment then the Dimension View in the target environment will be dropped.
 
@@ -415,9 +415,9 @@ If a Dimension Node of materialization type view is deleted from a Workspace, th
 
 ## Fact
 
-The Coalesce Fact UDN is a versatile node that allows you to develop and deploy a Fact table in Snowflake.
+The Coalesce Fact UDN is a versatile node that allows you to develop and deploy a Fact table in Databricks.
 
-A fact table or a fact entity is a table or entity in a star or snowflake schema that stores measures that measure the business, such as sales, cost of goods, or profit. Fact tables and entities aggregate measures, or the numerical data of a business.
+A fact table or a fact entity is a table or entity in a star or Databricks schema that stores measures that measure the business, such as sales, cost of goods, or profit. Fact tables and entities aggregate measures, or the numerical data of a business.
 
 ### Fact Node Configuration
 
@@ -545,11 +545,11 @@ This is executed in two stages:
 | **Stage** | **Description** |
 |-----------|----------------|
 | **Delete Table** | Coalesce Internal table is dropped |
-| **Delete Table** | Target table in Snowflake is dropped |
+| **Delete Table** | Target table in Databricks is dropped |
 
 ## View 
 
-The Coalesce View UDN is a versatile node that allows you to develop and deploy a View in Snowflake.
+The Coalesce View UDN is a versatile node that allows you to develop and deploy a View in Databricks.
 
 A view allows the result of a query to be accessed as if it were a table. Views serve a variety of purposes, including combining, segregating, and protecting data.
 
