@@ -16,7 +16,7 @@ operation:
     truncateBefore: true
   database: ""
   deployEnabled: true
-  description: WOrk orders table
+  description: ""
   isMultisource: false
   locationName: TARGET
   materializationType: table
