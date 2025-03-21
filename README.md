@@ -80,10 +80,6 @@ Join conditions and other clauses can be specified in the join space next to map
 >
 > You should specify group by and order by clauses in this space if you are not opting for the group by all and order by provided in OPTIONS config.
 
-### Work ASOF Joins
-After selecting options for ASOF Join,Click on Generate join, use the 'Copy To Editor' to add the new ASOF join.
-<img width="256" alt="image" src="https://github.com/user-attachments/assets/f87a6b11-8c3f-4226-8d5f-fdcd1e3a1c6e" />
-
 ### Work Deployment
 
 #### Work Initial Deployment
