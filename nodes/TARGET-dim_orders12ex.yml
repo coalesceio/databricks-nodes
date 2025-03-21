@@ -19,7 +19,7 @@ operation:
     truncateBefore: true
   database: ""
   deployEnabled: true
-  description: Dimension -Databricks
+  description: ""
   isMultisource: false
   locationName: TARGET
   materializationType: table
