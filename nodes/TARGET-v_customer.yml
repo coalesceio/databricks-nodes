@@ -6,12 +6,13 @@ operation:
     OverrideSQLCreate: false
     groupByAll: false
     insertStrategy: UNION
+    secureoption: false
     selectDistinct: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
-  locationName: SOURCE
+  locationName: TARGET
   materializationType: view
   metadata:
     appliedNodeTests: []
@@ -144,7 +145,7 @@ operation:
   name: v_customer
   overrideSQL: false
   schema: ""
-  sqlType: View
+  sqlType: "452"
   type: sql
   version: 1
 type: Node

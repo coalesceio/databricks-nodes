@@ -31,7 +31,7 @@ operation:
           columnCounter: 14d56c78-a38a-415b-98a3-2d5c9c966123
           stepCounter: 606f5a87-0b70-4864-93f7-96f3de870cfc
         config: {}
-        dataType: NUMBER
+        dataType: BIGINT
         defaultValue: ""
         description: ""
         isSurrogateKey: true
@@ -174,7 +174,7 @@ operation:
           columnCounter: ec0b9303-5f75-437c-8580-a2b792fa9df7
           stepCounter: 606f5a87-0b70-4864-93f7-96f3de870cfc
         config: {}
-        dataType: NUMBER
+        dataType: INT
         defaultValue: ""
         description: ""
         isSystemVersion: true
@@ -191,7 +191,7 @@ operation:
           columnCounter: b007b3d7-57fd-443b-983d-3a0bbdf004a3
           stepCounter: 606f5a87-0b70-4864-93f7-96f3de870cfc
         config: {}
-        dataType: VARCHAR
+        dataType: VARCHAR(1)
         defaultValue: ""
         description: ""
         isSystemCurrentFlag: true
