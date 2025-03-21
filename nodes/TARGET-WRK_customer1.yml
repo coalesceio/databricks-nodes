@@ -1,6 +1,6 @@
 fileVersion: 1
 id: a045289f-b655-4332-82cd-83ed15c594eb
-name: WRK_customer
+name: WRK_customer1
 operation:
   config:
     groupByAll: false
@@ -146,9 +146,9 @@ operation:
             nodeName: customer
         join:
           joinCondition: FROM {{ ref('SOURCE', 'customer') }} `customer`
-        name: WRK_customer
+        name: WRK_customer1
         noLinkRefs: []
-  name: WRK_customer
+  name: WRK_customer1
   overrideSQL: false
   schema: ""
   sqlType: Stage

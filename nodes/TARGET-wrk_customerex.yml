@@ -9,8 +9,14 @@ operation:
     orderbycolumn:
       items:
         - {}
-    postSQL: ""
-    preSQL: ""
+    postSQL: |2-
+          SELECT count(*)
+          FROM `coalesce`.`sample_data`.`customer` `customer`
+          where `customer`.`c_custkey` > 40
+    preSQL: |2-
+          SELECT count(*)
+          FROM `coalesce`.`sample_data`.`customer` `customer`
+          where `customer`.`c_custkey` > 40
     selectDistinct: false
     testsEnabled: true
     truncateBefore: true

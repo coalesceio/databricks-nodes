@@ -1,6 +1,6 @@
 fileVersion: 1
 id: 92bd4856-7225-4c20-b72c-83017e991124
-name: wrk_orders
+name: wrk_orders1
 operation:
   config:
     groupByAll: false
@@ -16,7 +16,7 @@ operation:
     truncateBefore: true
   database: ""
   deployEnabled: true
-  description: ""
+  description: WOrk orders table
   isMultisource: false
   locationName: TARGET
   materializationType: table
@@ -42,8 +42,8 @@ operation:
           columnCounter: 14c4ed50-7b18-42a4-a9a1-3568926e43ba
           stepCounter: 92bd4856-7225-4c20-b72c-83017e991124
         config: {}
-        dataType: LONG
-        description: ""
+        dataType: BIGINT
+        description: Customer key
         name: o_custkey
         nullable: true
         sourceColumnReferences:
@@ -72,7 +72,7 @@ operation:
         config: {}
         dataType: DECIMAL
         description: ""
-        name: o_totalprice
+        name: o_totalprice1
         nullable: true
         sourceColumnReferences:
           - columnReferences:
@@ -163,9 +163,9 @@ operation:
           joinCondition: |-
             FROM {{ ref('SOURCE', 'orders') }} `orders`
             where `orders`.`o_orderkey`<5
-        name: wrk_orders
+        name: wrk_orders1
         noLinkRefs: []
-  name: wrk_orders
+  name: wrk_orders1
   overrideSQL: false
   schema: ""
   sqlType: "363"

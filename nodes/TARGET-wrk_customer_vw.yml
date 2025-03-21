@@ -3,7 +3,7 @@ id: fc55d234-76bf-49df-96a5-cb5c7040908e
 name: wrk_customer_vw
 operation:
   config:
-    groupByAll: false
+    groupByAll: true
     insertStrategy: INSERT
     orderby: false
     orderbycolumn:
@@ -11,7 +11,7 @@ operation:
         - {}
     postSQL: ""
     preSQL: ""
-    selectDistinct: true
+    selectDistinct: false
     testsEnabled: false
     truncateBefore: true
   database: ""
@@ -142,16 +142,16 @@ operation:
         customSQL:
           customSQL: |-
             {{ stage('Override Create SQL') }}
-            	CREATE OR REPLACE VIEW {{ ref('SOURCE', 'wrk_customer_vw')}} AS (
+            	CREATE OR REPLACE VIEW {{ ref('TARGET', 'wrk_customer_vw')}} AS (
             		SELECT 
-             "c_custkey" AS "c_custkey",
-             "c_name" AS "c_name",
-             "c_address" AS "c_address",
-             "c_nationkey" AS "c_nationkey",
-             "c_phone" AS "c_phone",
-             "c_acctbal" AS "c_acctbal",
-             "c_mktsegment" AS "c_mktsegment",
-             "c_comment" AS "c_comment"
+             `c_custkey` AS `c_custkey`,
+             `c_name` AS `c_name`,
+             `c_address` AS `c_address`,
+             `c_nationkey` AS `c_nationkey`,
+             `c_phone` AS `c_phone`,
+             `c_acctbal` AS `c_acctbal`,
+             `c_mktsegment` AS `c_mktsegment`,
+             `c_comment` AS `c_comment`
              FROM {{ ref('SOURCE', 'customer') }}
             	)
         dependencies:
@@ -162,7 +162,7 @@ operation:
         name: wrk_customer_vw
         noLinkRefs: []
   name: wrk_customer_vw
-  overrideSQL: false
+  overrideSQL: true
   schema: ""
   sqlType: "363"
   type: sql
