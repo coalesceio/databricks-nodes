@@ -1,0 +1,14 @@
+fileVersion: 1
+id: "424"
+mappingDefinitions:
+  FEDS:
+    database: coalesce
+    schema: target_dev
+  SOURCE:
+    database: coalesce
+    schema: sample_data
+  TARGET:
+    database: coalesce
+    schema: target_dep
+name: QA1
+type: Environment
