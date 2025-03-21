@@ -3,16 +3,19 @@ id: 452062c6-9fff-4680-9b62-149a44a88ce4
 name: fct_lineitem_orders
 operation:
   config:
-    groupByAll: false
+    groupByAll: true
     insertStrategy: UNION ALL
-    orderby: false
+    orderby: true
     orderbycolumn:
       items:
-        - {}
+        - sortColName:
+            columnCounter: 0a8efc0e-5397-4d4a-b8f7-a57bc8c93df0
+            stepCounter: 452062c6-9fff-4680-9b62-149a44a88ce4
+          sortOrder: desc
     postSQL: ""
     preSQL: ""
-    selectDistinct: true
-    testsEnabled: false
+    selectDistinct: false
+    testsEnabled: true
     truncateBefore: false
   database: ""
   deployEnabled: true
@@ -21,7 +24,12 @@ operation:
   locationName: TARGET
   materializationType: table
   metadata:
-    appliedNodeTests: []
+    appliedNodeTests:
+      - continueOnFailure: true
+        description: ""
+        name: Test
+        runOrder: After
+        templateString: select * from `coalesce`.`target_de`.`fct_lineitem_orders` where l_orderkey < 0
     columns:
       - appliedColumnTests: {}
         columnReference:
@@ -426,6 +434,7 @@ operation:
             FROM {{ ref('SOURCE', 'lineitem') }} `lineitem`
             INNER JOIN {{ ref('SOURCE', 'orders') }} `orders`
             ON `lineitem`.`l_orderkey` = `orders`.`o_orderkey`
+            where `lineitem`.`l_orderkey` > 11
         name: fct_lineitem_orders
         noLinkRefs: []
   name: fct_lineitem_orders

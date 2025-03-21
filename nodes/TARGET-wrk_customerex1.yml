@@ -32,7 +32,7 @@ operation:
         dataType: LONG
         description: ""
         name: c_custkey
-        nullable: true
+        nullable: false
         sourceColumnReferences:
           - columnReferences:
               - columnCounter: e225cff2-58ad-4cd0-baca-bab83900e691
@@ -74,7 +74,7 @@ operation:
         dataType: LONG
         description: ""
         name: c_nationkey
-        nullable: true
+        nullable: false
         sourceColumnReferences:
           - columnReferences:
               - columnCounter: 11a303ac-aadb-45c8-afec-abe37e92d5e4
