@@ -1,6 +1,6 @@
 fileVersion: 1
 id: 606f5a87-0b70-4864-93f7-96f3de870cfc
-name: dim_orders
+name: dim_orders12
 operation:
   config:
     groupByAll: false
@@ -11,14 +11,14 @@ operation:
         - {}
     postSQL: ""
     preSQL: ""
-    selectDistinct: false
+    selectDistinct: true
     testsEnabled: false
     truncateBefore: false
   database: ""
   deployEnabled: true
   description: ""
   isMultisource: false
-  locationName: SOURCE
+  locationName: TARGET
   materializationType: table
   metadata:
     appliedNodeTests: []
@@ -47,6 +47,7 @@ operation:
         config: {}
         dataType: LONG
         description: ""
+        isBusinessKey: true
         name: o_orderkey
         nullable: true
         sourceColumnReferences:
@@ -279,9 +280,9 @@ operation:
             nodeName: orders
         join:
           joinCondition: FROM {{ ref('SOURCE', 'orders') }} `orders`
-        name: dim_orders
+        name: dim_orders12
         noLinkRefs: []
-  name: dim_orders
+  name: dim_orders12
   overrideSQL: false
   schema: ""
   sqlType: "365"

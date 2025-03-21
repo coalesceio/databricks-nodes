@@ -3,12 +3,15 @@ id: 0a6817b2-1c41-4be3-91aa-456355888916
 name: fct_lineitem
 operation:
   config:
-    groupByAll: false
+    groupByAll: true
     insertStrategy: UNION ALL
-    orderby: false
+    orderby: true
     orderbycolumn:
       items:
-        - {}
+        - sortColName:
+            columnCounter: b0f6b90a-c2c1-4f85-9e6e-597b54464e9e
+            stepCounter: 0a6817b2-1c41-4be3-91aa-456355888916
+          sortOrder: desc
     postSQL: ""
     preSQL: ""
     selectDistinct: false
@@ -18,7 +21,7 @@ operation:
   deployEnabled: true
   description: ""
   isMultisource: false
-  locationName: SOURCE
+  locationName: TARGET
   materializationType: table
   metadata:
     appliedNodeTests: []
@@ -30,6 +33,7 @@ operation:
         config: {}
         dataType: LONG
         description: ""
+        isBusinessKey: true
         name: l_orderkey
         nullable: true
         sourceColumnReferences:
