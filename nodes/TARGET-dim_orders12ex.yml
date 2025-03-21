@@ -119,7 +119,7 @@ operation:
           columnCounter: c8d134ba-2333-4578-9010-7fec4d351d92
           stepCounter: 606f5a87-0b70-4864-93f7-96f3de870cfc
         config: {}
-        dataType: VARCHAR(256)
+        dataType: STRING
         description: ""
         name: o_orderpriority
         nullable: true
@@ -147,7 +147,7 @@ operation:
           columnCounter: 5c2296ff-e000-41d6-aa19-78075750b3c8
           stepCounter: 606f5a87-0b70-4864-93f7-96f3de870cfc
         config: {}
-        dataType: INT
+        dataType: BIGINT
         description: ""
         name: o_shippriority12
         nullable: true
