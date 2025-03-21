@@ -18,7 +18,7 @@ operation:
   deployEnabled: true
   description: ""
   isMultisource: true
-  locationName: TARGET
+  locationName: FEDS
   materializationType: table
   metadata:
     appliedNodeTests: []
@@ -49,7 +49,7 @@ operation:
         dataType: LONG
         description: ""
         isBusinessKey: true
-        name: o_orderkey
+        name: o_orderkey1
         nullable: false
         sourceColumnReferences:
           - columnReferences:
@@ -287,7 +287,7 @@ operation:
             nodeName: dim_orders12ex
         join:
           joinCondition: FROM {{ ref('TARGET', 'dim_orders12ex') }} `dim_orders12ex`
-        name: fct_dim_orders12ex
+        name: fct_dim_orders12ex1
         noLinkRefs: []
       - aliases:
           dim_ordersvw: 6c2af1e1-6f0f-4052-9e93-26c8392b64ef

@@ -3,16 +3,18 @@ id: 2f95e627-381e-4940-84c3-1527718bd6ae
 name: pstg_orders
 operation:
   config:
-    groupByAll: false
+    groupByAll: true
     insertStrategy: UNION ALL
     orderby: true
     orderbycolumn:
       items:
-        - sortColName: null
-          sortOrder: null
+        - sortColName:
+            columnCounter: 65231182-4874-4764-879e-dac8f5e3ec91
+            stepCounter: 2f95e627-381e-4940-84c3-1527718bd6ae
+          sortOrder: desc
     postSQL: ""
     preSQL: ""
-    selectDistinct: true
+    selectDistinct: false
     testsEnabled: false
     truncateBefore: true
   database: ""
@@ -124,7 +126,7 @@ operation:
           - columnReferences:
               - columnCounter: 0e09ff8e-ff62-4f20-ac09-86e24996103c
                 stepCounter: 32f97d1f-291b-4ef6-9654-d8bbb3b989d7
-            transform: ""
+            transform: substr(`orders`.`o_orderpriority`,1,3)
       - appliedColumnTests: {}
         columnReference:
           columnCounter: 017c3a41-b17a-49e3-ac04-5c7927affa2a

@@ -51,6 +51,7 @@ operation:
         dataType: LONG
         description: ""
         isBusinessKey: true
+        isChangeTracking: true
         name: n_nationkey
         nullable: true
         sourceColumnReferences:

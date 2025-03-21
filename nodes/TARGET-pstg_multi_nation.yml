@@ -3,7 +3,7 @@ id: 42c4beab-cf28-4f0a-a3d3-723aa4f12e37
 name: pstg_multi_nation
 operation:
   config:
-    groupByAll: true
+    groupByAll: false
     insertStrategy: UNION ALL
     orderby: true
     orderbycolumn:
@@ -12,9 +12,9 @@ operation:
             columnCounter: 189ebda1-c737-473c-89a2-d5dbf63559c7
             stepCounter: 42c4beab-cf28-4f0a-a3d3-723aa4f12e37
           sortOrder: desc
-    postSQL: ""
-    preSQL: ""
-    selectDistinct: false
+    postSQL: select count(*) from `coalesce`.`target_de`.`pstg_multi_nation`
+    preSQL: select count(*)  from `coalesce`.`target_de`.`pstg_multi_nation`
+    selectDistinct: true
     testsEnabled: false
     truncateBefore: false
   database: ""

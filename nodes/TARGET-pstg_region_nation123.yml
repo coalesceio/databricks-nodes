@@ -1,6 +1,6 @@
 fileVersion: 1
 id: 67010697-28d8-4c77-9910-06645a48f25e
-name: pstg_region_nation
+name: pstg_region_nation123
 operation:
   config:
     groupByAll: true
@@ -15,8 +15,8 @@ operation:
     postSQL: ""
     preSQL: ""
     selectDistinct: false
-    testsEnabled: false
-    truncateBefore: false
+    testsEnabled: true
+    truncateBefore: true
   database: ""
   deployEnabled: true
   description: TYPE-2 PSTAGE
@@ -24,7 +24,12 @@ operation:
   locationName: TARGET
   materializationType: table
   metadata:
-    appliedNodeTests: []
+    appliedNodeTests:
+      - continueOnFailure: true
+        description: ""
+        name: Test
+        runOrder: After
+        templateString: select * from `coalesce`.`target_de`.`pstg_region_nation` where n_nationkey < 3
     columns:
       - acceptedValues:
           strictMatch: true
@@ -80,7 +85,7 @@ operation:
         config: {}
         dataType: STRING
         description: ""
-        name: r_comment
+        name: r_comment1
         nullable: true
         sourceColumnReferences:
           - columnReferences:
@@ -263,9 +268,10 @@ operation:
             FROM {{ ref('SOURCE', 'region') }} `region`
             INNER JOIN {{ ref('SOURCE', 'nation') }} `nation`
             ON `region`.`r_regionkey` = `nation`.`n_regionkey`
-        name: pstg_region_nation
+            where `nation`.`n_nationkey`<3
+        name: pstg_region_nation123
         noLinkRefs: []
-  name: pstg_region_nation
+  name: pstg_region_nation123
   overrideSQL: false
   schema: ""
   sqlType: "367"
