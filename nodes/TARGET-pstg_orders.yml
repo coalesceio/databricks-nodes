@@ -50,6 +50,8 @@ operation:
         config: {}
         dataType: LONG
         description: ""
+        isBusinessKey: true
+        isChangeTracking: true
         name: o_orderkey
         nullable: true
         sourceColumnReferences:
@@ -64,6 +66,7 @@ operation:
         config: {}
         dataType: LONG
         description: ""
+        isChangeTracking: true
         name: o_custkey
         nullable: true
         sourceColumnReferences:
@@ -78,6 +81,7 @@ operation:
         config: {}
         dataType: STRING
         description: ""
+        isChangeTracking: true
         name: o_orderstatus
         nullable: true
         sourceColumnReferences:
@@ -92,6 +96,7 @@ operation:
         config: {}
         dataType: DECIMAL
         description: ""
+        isChangeTracking: true
         name: o_totalprice
         nullable: true
         sourceColumnReferences:
@@ -106,6 +111,7 @@ operation:
         config: {}
         dataType: DATE
         description: ""
+        isChangeTracking: true
         name: o_orderdate
         nullable: true
         sourceColumnReferences:
@@ -120,6 +126,7 @@ operation:
         config: {}
         dataType: STRING
         description: ""
+        isChangeTracking: true
         name: o_orderpriority
         nullable: true
         sourceColumnReferences:
@@ -134,6 +141,7 @@ operation:
         config: {}
         dataType: STRING
         description: ""
+        isChangeTracking: true
         name: o_clerk
         nullable: true
         sourceColumnReferences:
@@ -148,6 +156,7 @@ operation:
         config: {}
         dataType: INT
         description: ""
+        isChangeTracking: true
         name: o_shippriority
         nullable: true
         sourceColumnReferences:
@@ -162,6 +171,7 @@ operation:
         config: {}
         dataType: STRING
         description: ""
+        isChangeTracking: true
         name: o_comment
         nullable: true
         sourceColumnReferences:

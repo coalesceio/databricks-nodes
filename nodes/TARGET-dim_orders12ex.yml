@@ -5,6 +5,13 @@ operation:
   config:
     groupByAll: true
     insertStrategy: UNION ALL
+    insertZeroKey: true
+    insertZeroKeyAdvanced: false
+    insertZeroKeyBol: "TRUE"
+    insertZeroKeyDate: 01-01-1900
+    insertZeroKeyStr: NEW
+    insertZeroKeySurrogateKey: "-1"
+    insertZeroKeyTimestamp: null
     orderby: true
     orderbycolumn:
       items:
