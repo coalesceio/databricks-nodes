@@ -5,6 +5,7 @@ operation:
   config:
     groupByAll: false
     insertStrategy: UNION ALL
+    insertZeroKey: false
     orderby: true
     orderbycolumn:
       items:

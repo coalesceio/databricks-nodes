@@ -94,6 +94,81 @@ metadata:
         isRequired: true
         enableIf: "{% if config.orderby %} true {% else %} false {% endif %}"
 
+      - type: toggleButton
+        attributeName: insertZeroKey
+        displayName: Insert Zero Key Record
+        default: false
+        enableIf: "{% if node.materializationType == 'table' or node.materializationType == 'transient table'%} true {% else %} false {% endif %}"
+
+    - groupName: Zero Key Record Options
+      items:
+      - displayName: Default Surrogate Key Value
+        attributeName: insertZeroKeySurrogateKey
+        type: textBox
+        default: "0"
+        isRequired: false
+        enableIf: "{% if config.insertZeroKey == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+
+      - displayName: Default String Value
+        attributeName: insertZeroKeyStr
+        type: textBox
+        default: "UNKNOWN"
+        isRequired: false
+        enableIf: "{% if config.insertZeroKey == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+
+      - displayName: Default Date Value (Date Format DD-MM-YYYY)
+        attributeName: insertZeroKeyDate
+        type: textBox
+        default: "01-01-1900"
+        isRequired: false
+        enableIf: "{% if config.insertZeroKey == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+
+      - displayName: Default Timestamp Value (Timestamp Format YYYY-MM-DD HH24:MI:SS.FF)
+        attributeName: insertZeroKeyTimestamp
+        type: textBox
+        default: "1900-01-01 00:00:00.000"
+        isRequired: false
+        enableIf: "{% if config.insertZeroKey == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+        
+      - displayName: Default Boolean Value
+        attributeName: insertZeroKeyBol
+        type: dropdownSelector
+        default: "TRUE"
+        isRequired: false
+        options:
+        - "TRUE"
+        - "FALSE"
+        enableIf: "{% if config.insertZeroKey == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+
+      - type: toggleButton
+        attributeName: insertZeroKeyAdvanced
+        displayName: Advanced Zero Key Record Options
+        default: false
+        enableIf: "{% if (node.materializationType == 'table'  and config.insertZeroKey == true) %} true {% else %} false {% endif %}"
+
+      - type: tabular
+        displayName: 'Custom Zero Key Values'
+        attributeName: customZeroKeyValues
+        columns:
+
+        - type: columnDropdownSelector
+          displayName: Column
+          attributeName: columnNameDefault
+          isRequired: false
+          enableIf: "{% if config.insertZeroKey == true and config.insertZeroKeyAdvanced  == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+      
+        -  type: textBox
+           displayName: Default Value
+           attributeName: columnValueDefault
+           isRequired: false
+           enableIf: "{% if config.insertZeroKey == true and config.insertZeroKeyAdvanced  == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+      
+        isRequired: false
+        enableIf: "{% if config.insertZeroKey == true and config.insertZeroKeyAdvanced  == true and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+      enableIf: "{% if config.insertZeroKey  and node.materializationType != 'view' %} true {% else %} false {% endif %}"
+
+    - groupName: Pre / Post SQL
+      items:
       - displayName: Pre-SQL
         attributeName: preSQL
         type: textBox
