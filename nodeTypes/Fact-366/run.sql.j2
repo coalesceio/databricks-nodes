@@ -9,6 +9,20 @@ does not permit copying or modification for any other purpose.
 {# == Node Type Name           : Fact  == #}
 {# == Node Type Description    : This node loads data into work table using config options distinct,groupby all,order by ,multi-source  == #}
 
+{# == Check if last modified comparison toggle is enabled  #}
+
+{% set has_business_key = columns | selectattr("isBusinessKey") | list | length > 0 %}
+{%if config.lastModifiedComparison%}
+ {% set last_modified_col = config.lastModifiedColumn.name | default('') %}
+{%endif%}
+
+{%if config.treatNullAsCurrentTimestamp  and 'TIMESTAMP' in (config.lastModifiedColumn.dataType | upper)  %}
+     {%set useCurrentTimeStamp = true %}
+   {%else%}
+     {%set useCurrentTimeStamp = false %}
+   {%endif%}
+
+
 {# == To run data quality tests before data insertion == #}
 
 {% for test in node.tests if config.testsEnabled %}
@@ -53,11 +67,34 @@ does not permit copying or modification for any other purpose.
                     DISTINCT
                     {% endif %}
                     {% for col in source.columns %}
+                        {% if col.name == last_modified_col and useCurrentTimeStamp %}
+					     COALESCE({{ get_source_transform(col) }},CURRENT_TIMESTAMP()) AS `{{ col.name }}`,
+						 COALESCE({{ get_source_transform(col) }},CURRENT_TIMESTAMP()) as COMPARISON_VALUE,
+						 MAX (`DIM`.`{{last_modified_col}}`) AS MAX_TARGET_VALUE		    
+                       {% elif col.name == last_modified_col and not useCurrentTimeStamp%}
+                        {{ get_source_transform(col) }} AS `{{ col.name }}`,
+						 {{ get_source_transform(col) }} AS COMPARISON_VALUE,
+					     MAX (`DIM`.`{{last_modified_col}}`) AS MAX_TARGET_VALUE
+                       {%else%}
                         {{ get_source_transform(col) }} AS `{{ col.name }}`
-                        {%- if not loop.last %}, {% endif %}
+                       {%endif%}
+                       {%- if not loop.last %}, {% endif %}
                     {% endfor %}
-                    {{ source.join }}
-                    {% if config.groupByAll %}
+                    {{ get_clause(source.join,'from')}}
+                    {%if config.lastModifiedComparison%}	        
+                        LEFT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
+                             {% for col in source.columns if col.isBusinessKey -%}
+                                {% if not loop.first %}
+                                    AND
+                                {% endif %}
+                                {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
+                            {% endfor %}
+                  {%endif%}
+                   {% set clause = get_clause(source.join) %}
+                   {% if clause %}
+                      {{ ("WHERE " ~ clause.strip()[3:].strip()) if clause.strip().upper().startswith('AND') else clause }}
+                   {% endif %}
+                    {% if config.groupByAll or config.lastModifiedComparison%}				
                         GROUP BY ALL
                     {% endif %}
                     {{ sortorder_by_colv() }})
@@ -73,8 +110,10 @@ does not permit copying or modification for any other purpose.
                         AND
                     {% endif %}
                     `SRC`.`{{ col.name }}` = `TGT`.`{{ col.name }}`
+					
                 {% endfor %}
-                WHEN MATCHED
+    WHEN MATCHED
+				{%if not config.lastModifiedComparison%}
                 {% for col in columns if not (   col.isBusinessKey or
                                                         col.isSystemUpdateDate or
                                                         col.isSystemCreateDate) %}
@@ -83,12 +122,45 @@ does not permit copying or modification for any other purpose.
                     {% else %}
                         OR
                     {% endif %}
+					{% if col.dataType == 'GEOGRAPHY' %}
+							(
+								ST_DISTANCE(
+									(CASE 
+										WHEN `SRC`.`{{ col.name }}` IS NULL THEN TO_GEOGRAPHY('POINT(0 0)') 
+										ELSE `SRC`.`{{ col.name }}` 
+									END),
+									(CASE 
+										WHEN `TGT`.`{{ col.name }}` IS NULL THEN TO_GEOGRAPHY('POINT(0 0)') 
+										ELSE `TGT`.`{{ col.name }}` 
+									END)
+								) > 0
+							)
+						{% elif col.dataType == 'GEOMETRY' %}
+							(
+								ST_DISTANCE(
+									(CASE 
+										WHEN `SRC`.`{{ col.name }}` IS NULL THEN TO_GEOMETRY('POINT(0 0)') 
+										ELSE `SRC`.`{{ col.name }}` 
+									END),
+									(CASE 
+										WHEN `TGT`.`{{ col.name }}` IS NULL THEN TO_GEOMETRY('POINT(0 0)') 
+										ELSE `TGT`.`{{ col.name }}` 
+									END)
+								) > 0
+							)
+						{% else %}
+							(
                     NVL( CAST(`SRC`.`{{ col.name }}` as STRING), '**NULL**') <> NVL( CAST(`TGT`.`{{ col.name }}` as STRING), '**NULL**')
+					)
+					{% endif %}
                     {% if loop.last %}
                         )
                     {% endif %}
                 {% endfor %}
-
+                {%else%} 
+                    AND (`SRC`.COMPARISON_VALUE > `SRC`.MAX_TARGET_VALUE 
+                    OR `SRC`.MAX_TARGET_VALUE IS NULL)
+                {%endif%}
                 THEN UPDATE SET
                 {%- for col in columns if not (col.isBusinessKey or col.isSystemCreateDate) %}
                         `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
@@ -147,6 +219,11 @@ does not permit copying or modification for any other purpose.
             {{ stage('Post-SQL') }}
             {{ config.postSQL }}
         {% endif %}
+    {% else %}
+        {{ stage('Load Skipped for View') }}
+        -- The node {{node.name}} is materialized as View. Therefore, a Load operation is not supported.
+        SELECT 1 AS INFO_MESSAGE WHERE FALSE			  
+							
     {% endif %}
 
 {# == To run data quality tests after data insertion == #}
@@ -165,4 +242,5 @@ does not permit copying or modification for any other purpose.
                 {{ test.templateString }}
             {% endfor %}
         {% endfor %}
+
     {% endif %}
