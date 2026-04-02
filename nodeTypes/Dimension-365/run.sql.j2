@@ -612,7 +612,14 @@ does not permit copying or modification for any other purpose.
            THEN
            DELETE
         {% elif config.deleteStrategy == 'SOFT DELETE' %}
-            WHEN NOT MATCHED BY SOURCE 
+            WHEN NOT MATCHED BY SOURCE AND 
+			(
+            {% for col in columns if col.isSystemCurrentFlag %}
+            `TGT`.{{col.name}} = 'Y'
+            {% endfor %}
+            OR 
+            (TGT.SYSTEM_CURRENT_FLAG = 'N' AND TGT.SYSTEM_VERSION = 0)
+            )
          THEN UPDATE SET
             {% for col in columns if (col.isSystemCurrentFlag or col.isSystemEndDate or col.isSystemUpdateDate or col.isSystemVersion) %}                     
             {%- if col.isSystemCurrentFlag == true %}						
