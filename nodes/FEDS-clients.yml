@@ -1,0 +1,101 @@
+fileVersion: 1
+id: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+name: clients
+operation:
+  database: ""
+  deployEnabled: true
+  description: ""
+  locationName: FEDS
+  metadata:
+    columns:
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6fa419e8-b6e7-4d3c-933e-41296709834e
+          stepCounter: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+        config: {}
+        dataType: INT
+        defaultValue: ""
+        description: ""
+        name: client_id
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: c9452561-9710-42f2-b2a0-a08ce05c5ddc
+          stepCounter: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: client_name
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 26ab90b8-d374-4043-87d6-9e4524fb5f6d
+          stepCounter: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: email
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 74f6ad9d-373b-4825-82cf-dc367062ce04
+          stepCounter: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        name: region
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 94fdbffd-55bd-47d2-ab83-41857864996b
+          stepCounter: 9402b6bd-c459-4b7d-b122-bf2dd65e81d4
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        name: update_time
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: ""
+        transform: ""
+  name: clients
+  schema: ""
+  sqlType: Source
+  type: sourceInput
+  version: 1
+type: Node
