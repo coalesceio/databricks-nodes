@@ -366,7 +366,7 @@ does not permit copying or modification for any other purpose.
                         {% if col.isSystemVersion or col.isSystemCreateDate or col.isSystemStartDate %}
                             `DIM`.`{{ col.name }}`
                         {% elif col.isSystemCurrentFlag %}
-                            '0'
+                            'Y'
                         {% elif col.isSystemEndDate %}
                             DATEADD(SECOND, -1, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
                         {% else %}
@@ -382,10 +382,8 @@ does not permit copying or modification for any other purpose.
                         /* soft delete rows */
                         'SOFT_DELETE_ROWS' AS `DML_OPERATION`
                     {% endif %}
-
                     {{  get_clause(joinclause,'from')  }}
-
-                    RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
+                    INNER JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
                     {% for col in source.columns if col.isBusinessKey -%}
                         {% if not loop.first %}
                             AND
@@ -394,17 +392,32 @@ does not permit copying or modification for any other purpose.
                     {% endfor %}
 
                     WHERE
-                    {% for col in source.columns if col.isBusinessKey -%}
-                        {% if not loop.first %}
-                            AND
-                        {% endif %}
-                        {{ get_source_transform(col) }} IS NULL
-
-                        {% if config.deleteStrategy == "SOFT DELETE" %}
-                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
-                        {% endif %}
+                    {% for col in columns if col.isSystemCurrentFlag -%}
+                          `DIM`.{{col.name}} = 'Y'
+                    {%endfor%} 
+                    {%if config.lastModifiedComparison %} 
+                    {% for col in source.columns if col.name == last_modified_col -%}
+                       AND
+                    {%if useCurrentTimeStamp %}
+                      COALESCE({{ get_source_transform(col) }},CURRENT_TIMESTAMP()) = `DIM`.`{{last_modified_col}}`
+                   {%else%}
+                      {{ get_source_transform(col) }} = `DIM`.`{{last_modified_col}}`
+                   {%endif%}
+                   {% endfor %}  
+                   {%endif%}
+                  {%if not config.lastModifiedComparison %}																					
+                    {% for col in source.columns if (col.isChangeTracking == true) %}
+                       {% if loop.first %}
+                        AND (
+                       {% else %}
+                        OR
+                      {% endif %}             
+                      ( NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') = NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )														                
+                      {% if loop.last %}
+                       )
+                     {% endif %}
                     {% endfor %}
-                
+                 {%endif%}
                     {{ get_clause(joinclause) }}
 
                     {% if config.groupByAll %}
@@ -588,9 +601,16 @@ does not permit copying or modification for any other purpose.
         {% endfor -%}
         )
 		{%if config.deleteStrategy == 'HARD DELETE'%}
-           WHEN NOT MATCHED BY SOURCE 
-        THEN
-        DELETE
+           WHEN NOT MATCHED BY SOURCE AND 
+			(
+            {% for col in columns if col.isSystemCurrentFlag %}
+            `TGT`.{{col.name}} = 'Y'
+            {% endfor %}
+            OR 
+            (TGT.SYSTEM_CURRENT_FLAG = 'N' AND TGT.SYSTEM_VERSION = 0)
+            )
+           THEN
+           DELETE
         {% elif config.deleteStrategy == 'SOFT DELETE' %}
             WHEN NOT MATCHED BY SOURCE 
          THEN UPDATE SET
@@ -752,10 +772,18 @@ does not permit copying or modification for any other purpose.
             {% endfor -%}
             )
 			{%if config.deleteStrategy == 'HARD DELETE'%}
-            WHEN NOT MATCHED BY SOURCE AND TGT.`SYSTEM_CURRENT_FLAG` = 'Y' THEN
+			WHEN NOT MATCHED BY SOURCE AND 
+			(
+            {% for col in columns if col.isSystemCurrentFlag %}
+            `TGT`.{{col.name}} = 'Y'
+            {% endfor %}
+            OR 
+            (TGT.SYSTEM_CURRENT_FLAG = 'N' AND TGT.SYSTEM_VERSION = 0)
+            )
+            THEN
             DELETE
             {% elif config.deleteStrategy == 'SOFT DELETE' %}
-            WHEN NOT MATCHED BY SOURCE AND TGT.`SYSTEM_CURRENT_FLAG` = 'Y' THEN UPDATE SET
+            WHEN NOT MATCHED BY SOURCE  THEN UPDATE SET
             {% for col in columns if (col.isSystemCurrentFlag or col.isSystemEndDate or col.isSystemUpdateDate or col.isSystemVersion) %}                     
             {%- if col.isSystemCurrentFlag == true %}						
             `TGT`.`{{ col.name }}` = 'N'
