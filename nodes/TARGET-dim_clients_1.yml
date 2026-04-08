@@ -1,6 +1,6 @@
 fileVersion: 1
-id: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
-name: dim_clients
+id: bda398f1-80ab-4888-85ec-96b8baef7b2e
+name: dim_clients_1
 operation:
   config:
     customZeroKeyValues:
@@ -17,8 +17,8 @@ operation:
     insertZeroKeySurrogateKey: "0"
     insertZeroKeyTimestamp: "1900-01-01 00:00:00.000"
     lastModifiedColumn:
-      columnCounter: 41e1e24c-7fc2-4e9a-ba42-5bea7745543d
-      stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+      columnCounter: a166bdee-622e-4d47-9cad-d2d5cdcc0015
+      stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
     lastModifiedComparison: true
     orderby: false
     orderbycolumn:
@@ -45,8 +45,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 7dd497a6-2bbe-40d4-9608-641593e001d2
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: eb0adca1-2f06-4b90-9232-ce606141dbf5
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: BIGINT
         defaultValue: ""
@@ -59,8 +59,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 15df5a5d-4e8c-411b-9eb5-e2c4e28df16d
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 6581eca8-d8b6-42a9-a1f4-fe40cee2dfe6
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: INT
         description: ""
@@ -74,8 +74,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: b27dbcf6-7612-4c66-9b5e-2c074cf3ac19
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: db38b9de-1723-4162-b451-bb38ac4ce9e6
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: STRING
         description: ""
@@ -88,8 +88,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 05d078c2-c652-43f6-8fb2-6b762734e152
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: dd50682c-c02f-4b5b-b5ff-7b737e05ae2d
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: STRING
         description: ""
@@ -102,8 +102,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: ae04b417-d3d4-4f29-b837-b3083aae23eb
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 2ec91247-0e9a-4450-8bed-f588f671a3d0
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: STRING
         description: ""
@@ -116,8 +116,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 41e1e24c-7fc2-4e9a-ba42-5bea7745543d
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: a166bdee-622e-4d47-9cad-d2d5cdcc0015
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: TIMESTAMP
         description: ""
@@ -133,8 +133,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: d83e84e6-0b79-4637-b7f7-b1e67e1a6d8e
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: fc48cee0-0e69-467f-8879-ef9a2cc9bf79
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: INT
         defaultValue: ""
@@ -150,8 +150,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 7f474abd-1b53-4ec9-94fb-c149a5179618
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: bc02c4c9-5f3c-4792-83a9-68a311a21f2e
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: VARCHAR(1)
         defaultValue: ""
@@ -167,8 +167,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 8cb89f18-d19e-4108-9e83-4577ff00f0a0
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 902778dc-5172-4022-a661-3b64c159e449
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -184,8 +184,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 9b090657-be01-4624-a89e-863d915e8f86
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 8d8e7203-fff6-4b7e-b0bd-2ffe6df151d3
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -201,8 +201,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 5402fb99-b481-44ac-9c6e-22838e748177
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 6622e034-200c-4a32-8d70-45f1c80db800
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -218,8 +218,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 365d79fa-8d74-4ece-af29-45137b6bb302
-          stepCounter: 01e31c22-4ea8-4abc-b0ac-5c38ad14ab4d
+          columnCounter: 44de1237-20ab-41bc-9aa9-b101c74b8679
+          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -242,12 +242,12 @@ operation:
             nodeName: clients
         join:
           joinCondition: FROM {{ ref('FEDS', 'clients') }} `clients`
-        name: dim_clients
+        name: dim_clients_1
         noLinkRefs: []
-  name: dim_clients
+  name: dim_clients_1
   overrideSQL: false
   schema: ""
-  sqlType: "635"
+  sqlType: "365"
   type: sql
   version: 1
 type: Node

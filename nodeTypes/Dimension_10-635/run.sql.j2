@@ -352,7 +352,7 @@ does not permit copying or modification for any other purpose.
             {% endif %}
             {{ sortorder_by_colv() }}
             )
-             {% if (config.deleteStrategy == "SOFT DELETE"
+            {% if (config.deleteStrategy == "SOFT DELETE"
                     or config.deleteStrategy == "HARD DELETE")
                     and node.isMultisource == false %}
             /* Rows To Be Deleted As They No Longer Exist In Source */
@@ -366,9 +366,9 @@ does not permit copying or modification for any other purpose.
                         {% if col.isSystemVersion or col.isSystemCreateDate or col.isSystemStartDate %}
                             `DIM`.`{{ col.name }}`
                         {% elif col.isSystemCurrentFlag %}
-                            '0'
+                            'Y'
                         {% elif col.isSystemEndDate %}
-                            DATEADD(SECOND, -0.001, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
+                            DATEADD(SECOND, -1, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
                         {% else %}
                             `DIM`.`{{ col.name }}`
                         {% endif %}
@@ -382,10 +382,8 @@ does not permit copying or modification for any other purpose.
                         /* soft delete rows */
                         'SOFT_DELETE_ROWS' AS `DML_OPERATION`
                     {% endif %}
-
                     {{  get_clause(joinclause,'from')  }}
-
-                    RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
+                    INNER JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
                     {% for col in source.columns if col.isBusinessKey -%}
                         {% if not loop.first %}
                             AND
@@ -394,17 +392,32 @@ does not permit copying or modification for any other purpose.
                     {% endfor %}
 
                     WHERE
-                    {% for col in source.columns if col.isBusinessKey -%}
-                        {% if not loop.first %}
-                            AND
-                        {% endif %}
-                        {{ get_source_transform(col) }} IS NULL
-
-                        {% if config.deleteStrategy == "SOFT DELETE" %}
-                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
-                        {% endif %}
+                    {% for col in columns if col.isSystemCurrentFlag -%}
+                          `DIM`.{{col.name}} = 'Y'
+                    {%endfor%} 
+                    {%if config.lastModifiedComparison %} 
+                    {% for col in source.columns if col.name == last_modified_col -%}
+                       AND
+                    {%if useCurrentTimeStamp %}
+                      COALESCE({{ get_source_transform(col) }},CURRENT_TIMESTAMP()) = `DIM`.`{{last_modified_col}}`
+                   {%else%}
+                      {{ get_source_transform(col) }} = `DIM`.`{{last_modified_col}}`
+                   {%endif%}
+                   {% endfor %}  
+                   {%endif%}
+                  {%if not config.lastModifiedComparison %}																					
+                    {% for col in source.columns if (col.isChangeTracking == true) %}
+                       {% if loop.first %}
+                        AND (
+                       {% else %}
+                        OR
+                      {% endif %}             
+                      ( NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') = NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**') )														                
+                      {% if loop.last %}
+                       )
+                     {% endif %}
                     {% endfor %}
-                
+                 {%endif%}
                     {{ get_clause(joinclause) }}
 
                     {% if config.groupByAll %}
@@ -413,8 +426,8 @@ does not permit copying or modification for any other purpose.
 
                     {{ sortorder_by_colv() }}
                 )
-            {% endif %}          
-		   {# The if-block below avoids unnecessary updates when no type 2 column changes are present #}
+            {% endif %}
+            {# The if-block below avoids unnecessary updates when no type 2 column changes are present #}
             {% if source.columns 
                 | rejectattr('isSurrogateKey')
                 | rejectattr('isBusinessKey')
@@ -570,35 +583,12 @@ does not permit copying or modification for any other purpose.
             `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
         {% endfor %}
         AND `TGT`.`{{ get_value_by_column_attribute("isSystemVersion") }}` = `SRC`.`{{ get_value_by_column_attribute("isSystemVersion") }}`
-        {% if config.deleteStrategy == "HARD DELETE" %}
-		    WHEN MATCHED AND SRC.DML_OPERATION = 'HARD_DELETE_ROWS'
-            THEN DELETE
-		{% endif %}
-        {%if config.deleteStrategy == "SOFT DELETE" and config.lastModifiedComparison %}
-            WHEN MATCHED AND (SRC.DML_OPERATION = 'SOFT_DELETE_ROWS' OR SRC.DML_OPERATION = 'update_expired_version_rows' ) 
-            THEN UPDATE SET 
-            {% for col in columns if (col.isSystemCurrentFlag
-                                                or col.isSystemEndDate) %}
-                            {% if not loop.first %} , {% endif %}
-                        `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
-            {% endfor %}
-        {%elif config.lastModifiedComparison%}
-            WHEN MATCHED AND SRC.DML_OPERATION = 'update_expired_version_rows'  
-            THEN UPDATE SET 
-            {% for col in columns if (col.isSystemCurrentFlag
-                                                or col.isSystemEndDate) %}
-                            {% if not loop.first %} , {% endif %}
-                        `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
-            {% endfor %}
-        {%endif%}
-        {%if not config.lastModifiedComparison%}
-         WHEN MATCHED THEN UPDATE SET
-         {%- for col in columns if not (col.isBusinessKey or col.isSurrogateKey or col.isSystemCreateDate) %}
+        WHEN MATCHED THEN UPDATE SET
+        {%- for col in columns if not (col.isBusinessKey or col.isSurrogateKey or col.isSystemCreateDate) %}
             `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
             {% if not loop.last %}, {% endif %}
-         {% endfor -%}
-        {%endif%}
-        WHEN NOT MATCHED THEN INSERT (
+        {% endfor -%}
+        WHEN NOT MATCHED BY TARGET THEN INSERT (
         {%- for col in columns if not col.isSurrogateKey %}
             `{{ col.name }}`
             {% if not loop.last %}, {% endif %}
@@ -609,8 +599,40 @@ does not permit copying or modification for any other purpose.
             `SRC`.`{{ col.name }}`
             {% if not loop.last %}, {% endif %}
         {% endfor -%}
-        )      
-        
+        )
+		{%if config.deleteStrategy == 'HARD DELETE'%}
+           WHEN NOT MATCHED BY SOURCE AND 
+			(
+            {% for col in columns if col.isSystemCurrentFlag %}
+            `TGT`.{{col.name}} = 'Y'
+            {% endfor %}
+            OR 
+            (TGT.SYSTEM_CURRENT_FLAG = 'N' AND TGT.SYSTEM_VERSION = 0)
+            )
+           THEN
+           DELETE
+        {% elif config.deleteStrategy == 'SOFT DELETE' %}
+            WHEN NOT MATCHED BY SOURCE AND 
+			(
+            {% for col in columns if col.isSystemCurrentFlag %}
+            `TGT`.{{col.name}} = 'Y'
+            {% endfor %}
+            OR 
+            (TGT.SYSTEM_CURRENT_FLAG = 'N' AND TGT.SYSTEM_VERSION = 0)
+            )
+         THEN UPDATE SET
+            {% for col in columns if (col.isSystemCurrentFlag or col.isSystemEndDate or col.isSystemUpdateDate or col.isSystemVersion) %}                     
+            {%- if col.isSystemCurrentFlag == true %}						
+            `TGT`.`{{ col.name }}` = 'N'
+            {%- elif col.isSystemEndDate or col.isSystemUpdateDate %}
+            `TGT`.`{{ col.name }}` = CURRENT_TIMESTAMP
+            {%- elif col.isSystemVersion %}
+            `TGT`.`{{ col.name }}` = 0
+            {%- endif%}        
+            {%- if not loop.last %}, {% endif %}
+            {%- endfor %}
+            {% endif %}      
+
     {% else %}
         
         {# SCD-Type 1 Dimension == #}
