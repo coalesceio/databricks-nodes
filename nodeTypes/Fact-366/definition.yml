@@ -21,9 +21,9 @@ metadata:
 
       - type: overrideSQLToggle
         enableIf: "{% if node.materializationType == 'view' %} true {% else %} false {% endif %}"
-
+      
       - type: multisourceToggle
-        enableIf: "{% if node.materializationType == 'view' and node.override.create.enabled %} false {% else %} true {% endif %}"
+        enableIf: "{% if not(node.materializationType == 'view' and node.override.create.enabled) and node.isMultisource %} true {% else %} false {% endif %}"
 
       - displayName: Multi Source Strategy
         attributeName: insertStrategy
@@ -85,17 +85,13 @@ metadata:
         attributeName: selectDistinct
         type: toggleButton
         default: false
-        enableIf: "{% if config.groupByAll or 
-    	(node.materializationType == 'view' and 
-    	node.override.create.enabled} %} %} false {% else %} true {% endif %}"
+        enableIf: "{% if config.groupByAll or (node.materializationType == 'view' and node.override.create.enabled} %} %} false {% else %} true {% endif %}"
 
       - displayName: Group By All
         attributeName: groupByAll
         type: toggleButton
         default: false
-        enableIf: "{% if config.selectDistinct or  
-    	(node.materializationType == 'view' and 
-    	node.override.create.enabled) %} %} false {% else %} true {% endif %}"   
+        enableIf: "{% if config.selectDistinct or (node.materializationType == 'view' and node.override.create.enabled) %} %} false {% else %} true {% endif %}"   
 
       - displayName: Order By
         attributeName: orderby

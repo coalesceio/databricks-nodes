@@ -94,13 +94,13 @@ metadata:
       - displayName: Distinct
         attributeName: selectDistinct
         type: toggleButton
-        enableIf: "{% if config.groupByAll %} false {% else %} true {% endif %}"
+        enableIf: "{% if config.groupByAll or (node.materializationType == 'view' and node.override.create.enabled) %} false {% else %} true {% endif %}"
         default: false
-
+        
       - displayName: Group By All
         attributeName: groupByAll
         type: toggleButton
-        enableIf: "{% if config.selectDistinct %} false {% else %} true {% endif %}"
+        enableIf: "{% if config.selectDistinct or (node.materializationType == 'view' and node.override.create.enabled) %} false {% else %} true {% endif %}"    
         default: false
         
       - displayName: Order By
