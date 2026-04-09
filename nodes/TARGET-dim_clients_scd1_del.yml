@@ -1,24 +1,24 @@
 fileVersion: 1
-id: bda398f1-80ab-4888-85ec-96b8baef7b2e
-name: dim_clients_1
+id: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
+name: dim_clients_scd1_del
 operation:
   config:
     customZeroKeyValues:
       items:
         - {}
-    deleteStrategy: HARD DELETE
+    deleteStrategy: NO DELETE
     groupByAll: false
     insertStrategy: UNION ALL
-    insertZeroKey: true
+    insertZeroKey: false
     insertZeroKeyAdvanced: false
     insertZeroKeyBol: "TRUE"
     insertZeroKeyDate: 01-01-1900
     insertZeroKeyStr: UNKNOWN
-    insertZeroKeySurrogateKey: "-1"
+    insertZeroKeySurrogateKey: "0"
     insertZeroKeyTimestamp: "1900-01-01 00:00:00.000"
     lastModifiedColumn:
-      columnCounter: a166bdee-622e-4d47-9cad-d2d5cdcc0015
-      stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+      columnCounter: 06f5b759-788f-4e26-891f-fdeeb62af55d
+      stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
     lastModifiedComparison: true
     orderby: false
     orderbycolumn:
@@ -29,8 +29,8 @@ operation:
     selectDistinct: false
     testsEnabled: false
     treatNullAsCurrentTimestamp: false
-    truncateBefore: true
-    type2Dimension: false
+    truncateBefore: false
+    type2Dimension: true
   database: ""
   deployEnabled: true
   description: ""
@@ -45,8 +45,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: eb0adca1-2f06-4b90-9232-ce606141dbf5
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 3ae9f179-0230-4383-bb37-5173a6779785
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: BIGINT
         defaultValue: ""
@@ -59,8 +59,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 6581eca8-d8b6-42a9-a1f4-fe40cee2dfe6
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 0f2736b3-8887-4ed0-8809-64f9bf3fd255
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: INT
         description: ""
@@ -74,8 +74,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: db38b9de-1723-4162-b451-bb38ac4ce9e6
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: f77af1cd-0e06-4543-b69e-dffbc34c8d1d
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: STRING
         description: ""
@@ -88,8 +88,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: dd50682c-c02f-4b5b-b5ff-7b737e05ae2d
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 585929e3-8d39-4698-9a49-c3468fa8b867
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: STRING
         description: ""
@@ -102,8 +102,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 2ec91247-0e9a-4450-8bed-f588f671a3d0
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: e5eecaec-8972-45d2-b475-1b7c1ccfe51a
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: STRING
         description: ""
@@ -116,8 +116,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: a166bdee-622e-4d47-9cad-d2d5cdcc0015
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 06f5b759-788f-4e26-891f-fdeeb62af55d
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: TIMESTAMP
         description: ""
@@ -133,8 +133,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: fc48cee0-0e69-467f-8879-ef9a2cc9bf79
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 2d476fca-156c-443f-8805-df3eeee4658e
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: INT
         defaultValue: ""
@@ -150,8 +150,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: bc02c4c9-5f3c-4792-83a9-68a311a21f2e
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 3f2d8633-9f2f-4bc2-b34a-9e89a14ca927
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: VARCHAR(1)
         defaultValue: ""
@@ -167,8 +167,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 902778dc-5172-4022-a661-3b64c159e449
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 6d9aed09-dace-496f-a702-54d05c4e329d
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -184,8 +184,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 8d8e7203-fff6-4b7e-b0bd-2ffe6df151d3
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: bfa15da6-d0fd-4319-9af0-b23a25253baa
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -201,8 +201,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 6622e034-200c-4a32-8d70-45f1c80db800
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: 3e8e9ec6-ff0e-4593-b5db-02756432e06f
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -218,8 +218,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 44de1237-20ab-41bc-9aa9-b101c74b8679
-          stepCounter: bda398f1-80ab-4888-85ec-96b8baef7b2e
+          columnCounter: fee047b2-8477-40f5-bed3-87b7cba613b7
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -230,6 +230,46 @@ operation:
         sourceColumnReferences:
           - columnReferences: []
             transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 50513529-83a6-4b8d-8586-cee798d39ab4
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        keyColumnType: None
+        name: QUALIFYKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'Q'"
+        systemColumnType: None
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9a189c72-38f3-463b-b7e1-1cad2b89a7c6
+          stepCounter: 361a8177-94f6-40d4-bbd8-ed8c6f498d4c
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        keyColumnType: None
+        name: WHEREKEY
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'D'"
+        systemColumnType: None
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
@@ -241,10 +281,13 @@ operation:
           - locationName: FEDS
             nodeName: clients
         join:
-          joinCondition: FROM {{ ref('FEDS', 'clients') }} `clients`
-        name: dim_clients_1
+          joinCondition: |-
+            FROM {{ ref('FEDS', 'clients') }} `clients`
+            WHERE WHEREKEY = 'D' and QUALIFYKEY = 'Q' --comment
+            /*WHERE and QULAIFY ADDED*/
+        name: dim_clients_scd1_del
         noLinkRefs: []
-  name: dim_clients_1
+  name: dim_clients_scd1_del
   overrideSQL: false
   schema: ""
   sqlType: "365"

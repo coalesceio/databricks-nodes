@@ -135,6 +135,26 @@ operation:
               - columnCounter: 6c0bf12a-204b-497c-8138-bf17a14e9b5d
                 stepCounter: 9cd4150a-37ce-48e6-9335-b913a77c0da7
             transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: fb74169e-d5a1-40f5-8fc7-f12bedda3c7f
+          stepCounter: 9b7a2a75-16a1-4cd1-8401-f35c8d36f0f7
+        config: {}
+        dataType: timestamp
+        defaultValue: ""
+        description: ""
+        keyColumnType: None
+        name: update_time
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: current_timestamp()
+        systemColumnType: None
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:

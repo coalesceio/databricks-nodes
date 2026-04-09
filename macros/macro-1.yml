@@ -1,6 +1,6 @@
 fileVersion: 1
 id: "1"
-macroString: |2-
+macroString: |2
     {#-- The below block of code initialises variables in case of node typess using advance deployment strategy #}
     
     {% if desiredState %}
@@ -40,115 +40,81 @@ macroString: |2-
     
     
     {#-- This macro will split the join clause into from and rest of the clauses like where,groupby,orderby ,qualify  #}
-    {#-- Input parmeters   - joinclause #}
-    {#-- Return            - from clause and other clauses #}
-    
-    
-    {%- macro get_clause( joinclause , ret_clause ) -%}
-    
-                {% set join_clause = joinclause %}
-                {% set has_where_clause = 'where'in join_clause %}
-                {% set has_WHERE_clause = 'WHERE'in join_clause %}
-                {% set has_order_clause = 'order by'in join_clause %}
-                {% set has_ORDER_clause = 'ORDER BY'in join_clause %}
-                {% set has_group_clause =  'group by'in join_clause %}
-                {% set has_GROUP_clause = 'GROUP BY'in join_clause %}
-                {% set has_qualify_clause =  'qualify'in join_clause %}
-                {% set has_QUALIFY_clause = 'QUALIFY'in join_clause %}
-    
-               
-    
-                {% set clause='default' %}
-    
-                {% if has_where_clause %}
-    
-                    {% set keyword='where'%} 
-                    {% set clause='where_clause' %}
+  {#-- Input parmeters   - joinclause #}
+  {#-- Return            - from clause and other clauses #}
+
+
+  {%- macro get_clause( joinclause , ret_clause ) -%}
+
+      {#  STEP 1: Remove Block Comments /* ... */ --#}
+      {#  We split by the start of the comment and only keep the part after the end of the comment #}
+      {%- set ns_block = namespace(text="") -%}
+      {%- set block_parts = joinclause.split('/*') -%}
+      {%- set ns_block.text = block_parts[0] -%} {# The text before the very first /* #}
       
-                {% elif  has_WHERE_clause %}
-    
-                     {% set keyword='WHERE'%}
-                     {% set clause='where_clause' %}
-                {% endif %}
-    
-                {% if has_group_clause and clause != 'where_clause'  %}
-    
-                     {% set keyword='group by'%}
-                     {% set clause='group_clause' %}
-                
-                {% elif  has_GROUP_clause and clause != 'where_clause' %}
-    
-                     {% set keyword='GROUP BY'%}
-                     {% set clause='group_clause' %}
-    
-                {% endif %}
-    			
-                {% if has_qualify_clause and clause != 'where_clause' and clause != 'group_clause'  %}
-    
-                     {% set keyword='qualify'%}
-                     {% set clause='qualify_clause' %}
-                
-                {% elif  has_QUALIFY_clause and clause != 'where_clause' and clause != 'group_clause'  %}
-    
-                     {% set keyword='QUALIFY'%}
-                     {% set clause='qualify_clause' %}
-    
-                {% endif %}            
-    
-    			{% if has_order_clause and  clause != 'where_clause' and clause != 'group_clause' and clause != 'qualify_clause' %}
-    
-                     {% set keyword='order by'%}
-                     {% set clause='order_clause' %}
-                
-                {% elif has_ORDER_clause and clause != 'where_clause' and clause != 'group_clause' and clause != 'qualify_clause' %}
-    
-                     {% set keyword='ORDER BY'%}
-                     {% set clause='order_clause' %}
-    
-                {% endif %}
-    
-    
-    
-                {% if clause == 'where_clause' %}
-                   {% set parts = join_clause.split(keyword) %}
-                   {% set from_clause = parts[0] %}
-                   {% set add_clause = 'AND' + join_clause.split(keyword)[1] %}
-    
-                {% elif clause == 'group_clause' %}
-    
-                   {% set parts = join_clause.split(keyword) %}
-                   {% set from_clause = parts[0] %}
-                   {% set add_clause = 'group by' + join_clause.split(keyword)[1] %}
-    
-                
-                {% elif clause == 'qualify_clause' %}
-    
-                   {% set parts = join_clause.split(keyword) %}
-                   {% set from_clause = parts[0] %}
-                   {% set add_clause = 'qualify' + join_clause.split(keyword)[1] %}
-    
-    
-                {% elif clause == 'order_clause' %}
-    
-                   {% set parts = join_clause.split(keyword) %}
-                   {% set from_clause = parts[0] %}
-                   {% set add_clause =  'order by' + join_clause.split(keyword)[1] %}
-                   
-    
-                {% else %}
-    
-                   {% set from_clause = join_clause %}
-                   {% set add_clause = '' %}
-    
-                {% endif %}
-    			
-    			{% if ret_clause == 'from' %}
-    			   {{ from_clause }}
-    			{% else %}
-    			   {{ add_clause }}
-    			{% endif %}
-    			
-    			
-    {%- endmacro -%}
+      {%- for part in block_parts[1:] -%}
+          {%- if '*/' in part -%}
+              {# Split by the first occurrence of */ and take everything after it #}
+              {%- set after_comment = part.split('*/', 1)[1]  -%}
+              {%- set ns_block.text = ns_block.text ~ ' ' ~ after_comment  -%}
+          {%- endif -%}
+      {%- endfor -%}
+
+      {# STEP 2: Remove Line Comments #}
+      {%- set ns_line = namespace(clean_lines=[]) -%}
+      {%- for line in ns_block.text.split('\n') -%}
+          {%- set active_part = line.split('--')[0] -%}
+          {%- set ns_line.clean_lines = ns_line.clean_lines + [active_part] -%}
+      {%- endfor  -%}
+      
+      {# Rejoin everything and normalize whitespace for searching #}
+      {%- set cleaned_join_clause = ns_line.clean_lines | join(' ')  -%}
+      {%- set search_string = ' ' ~ cleaned_join_clause.lower().replace('\t', ' ').replace('\r', ' ') ~ ' '  -%}
+
+      {# STEP 3: Identify Keyword Split Point (Priority: WHERE > GROUP > QUALIFY > ORDER) #}
+      {%- set found_keyword = '' -%}
+      {%- set split_index = -1 -%}
+
+      {%- if ' where ' in search_string -%}
+          {%- set found_keyword = 'where'  -%}
+          {%- set split_index = search_string.find(' where ') -%}
+      {%- elif ' group by ' in search_string -%}
+          {%- set found_keyword = 'group by' -%}
+          {%- set split_index = search_string.find(' group by ') -%}
+      {%- elif ' qualify ' in search_string -%}
+          {%- set found_keyword = 'qualify' -%}
+          {%- set split_index = search_string.find(' qualify ') -%}
+      {%- elif ' order by ' in search_string -%}
+          {%- set found_keyword = 'order by' -%}
+          {%- set split_index = search_string.find(' order by ') -%}
+      {%- endif -%}
+
+      {# STEP 4: Perform the Split #}
+      {%- if split_index >= 0 -%}
+          {# split_index maps directly to cleaned_join_clause because we replaced chars 1-to-1 #}
+          {%- set from_part = cleaned_join_clause[:split_index] -%}
+          
+          {# offset = keyword length + 1 space #}
+          {%- set offset = found_keyword|length + 1 -%}
+          {%- set remainder = cleaned_join_clause[split_index + offset:] -%}
+
+          {%- if found_keyword == 'where' -%}
+              {%- set add_part = 'AND ' ~ remainder -%}
+          {%- else -%}
+              {%- set add_part = found_keyword ~ ' ' ~ remainder -%}
+          {%- endif -%}
+      {%- else -%}
+          {%- set from_part = cleaned_join_clause -%}
+          {%- set add_part = '' -%}
+      {%- endif -%}
+
+      {# STEP 5: Return Result #}
+      {%- if ret_clause == 'from' -%}
+          {{ from_part | trim }}
+      {%- else -%}
+          {{ add_part | trim }}
+      {%- endif  -%}
+
+  {%- endmacro -%}
 name: macro
 type: Macro
