@@ -4,7 +4,7 @@ isDisabled: false
 metadata:
   defaultStorageLocation: null
   error: null
-  nodeMetadataSpec: |
+  nodeMetadataSpec: |-
     capitalized: Fact
     plural: Facts
     short: FCT
@@ -23,7 +23,7 @@ metadata:
         enableIf: "{% if node.materializationType == 'view' %} true {% else %} false {% endif %}"
 
       - type: multisourceToggle
-        enableIf: "{% if node.override.create.enabled %} false {% else %} true {% endif %}"
+        enableIf: "{% if node.materializationType == 'view' and node.override.create.enabled %} false {% else %} true {% endif %}"
 
       - displayName: Multi Source Strategy
         attributeName: insertStrategy
@@ -33,11 +33,41 @@ metadata:
         - "UNION"
         - "UNION ALL"
         isRequired: false
-        enableIf: "{% if node.isMultisource %} true {% else %} false {% endif %}"
+        enableIf: "{% if not(node.materializationType == 'view' and node.override.create.enabled) and node.isMultisource %} true {% else %} false {% endif %}"
 
       - type: businessKeyColumns
         isRequired: false
         enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
+      
+      - type: toggleButton
+        attributeName: lastModifiedComparison
+        displayName: Last Modified Comparison
+        default: false
+        enableIf: "{% if node.materializationType != 'view' and (columns 
+                      | selectattr('isBusinessKey')
+                      | list
+                      | length > 0) %} true {% else %} false {% endif %}"
+
+      - type: label
+        attributeName: l1
+        displayName: Column chosen can either be a timestamp or incremental id column
+        enableIf: "{% if config.lastModifiedComparison  %} true {% else %} false {% endif %}"
+      
+      - type: columnDropdownSelector
+        attributeName: lastModifiedColumn
+        displayName: Last Modified Column
+        enableIf: "{% if config.lastModifiedComparison  %} true {% else %} false {% endif %}"
+      
+      - type: label
+        attributeName: l2
+        displayName: The below toggle is applicable only for timestamp column
+        enableIf: "{% if config.lastModifiedComparison  %} true {% else %} false {% endif %}"
+
+      - type: toggleButton
+        attributeName: treatNullAsCurrentTimestamp
+        displayName: Treat NULL as Current Timestamp
+        default: false
+        enableIf: "{% if config.lastModifiedComparison %} true {% else %} false {% endif %}"
 
       - displayName: Truncate Before
         attributeName: truncateBefore
@@ -55,13 +85,17 @@ metadata:
         attributeName: selectDistinct
         type: toggleButton
         default: false
-        enableIf: "{% if config.groupByAll or  node.override.create.enabled %} %} false {% else %} true {% endif %}"
+        enableIf: "{% if config.groupByAll or 
+    	(node.materializationType == 'view' and 
+    	node.override.create.enabled} %} %} false {% else %} true {% endif %}"
 
       - displayName: Group By All
         attributeName: groupByAll
         type: toggleButton
         default: false
-        enableIf: "{% if config.selectDistinct or  node.override.create.enabled %} %} false {% else %} true {% endif %}"   
+        enableIf: "{% if config.selectDistinct or  
+    	(node.materializationType == 'view' and 
+    	node.override.create.enabled) %} %} false {% else %} true {% endif %}"   
 
       - displayName: Order By
         attributeName: orderby
@@ -87,7 +121,7 @@ metadata:
              - asc
            
         isRequired: true
-        enableIf: "{% if config.orderby %} true {% else %} false {% endif %}"
+        enableIf: "{% if node.materializationType != 'view' and config.orderby %} true {% else %} false {% endif %}"
 
       - displayName: Pre-SQL
         attributeName: preSQL

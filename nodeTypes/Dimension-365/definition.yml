@@ -35,20 +35,7 @@ metadata:
         - "UNION ALL"
         isRequired: false
         enableIf: "{% if node.isMultisource %} true {% else %} false {% endif %}"
-
-      - type: businessKeyColumns
-        isRequired: true
-
-      - type: changeTrackingColumns
-        isRequired: false
-        enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
-
-      - displayName: Truncate Before
-        attributeName: truncateBefore
-        type: toggleButton
-        default: false
-        enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
-
+     
       - displayName: Enable Tests
         attributeName: testsEnabled
         type: toggleButton
@@ -93,6 +80,69 @@ metadata:
            
         isRequired: true
         enableIf: "{% if config.orderby %} true {% else %} false {% endif %}"
+
+    - groupName: Dimension Options
+      items:
+
+      - type: businessKeyColumns
+        isRequired: true
+      - type: toggleButton
+        attributeName: lastModifiedComparison
+        displayName: Last Modified Comparison
+        default: false
+        enableIf: "{% if node.materializationType != 'view'%} true {%else%} false {%endif%}"
+        
+
+      - type: label
+        attributeName: l1
+        displayName: Columns can either be a timestamp or incremental id column
+        enableIf: "{% if node.materializationType != 'view' and config.lastModifiedComparison %} true {% else %} false {% endif %}"
+        
+
+      - type: columnDropdownSelector
+        attributeName: lastModifiedColumn
+        displayName: Last Modified Column
+        enableIf: "{% if node.materializationType != 'view' and config.lastModifiedComparison %} true {% else %} false {% endif %}"
+
+      - type: label
+        attributeName: l2
+        displayName: The below toggle is applicable only for timestamp column
+        enableIf: "{% if node.materializationType != 'view' and config.lastModifiedComparison %} true {% else %} false {% endif %}"
+
+
+      - type: toggleButton
+        attributeName: treatNullAsCurrentTimestamp
+        displayName: Treat NULL as Current Timestamp
+        default: false
+        enableIf: "{% if config.lastModifiedComparison %} true {% else %} false {% endif %}"
+
+      - type: toggleButton
+        attributeName: type2Dimension
+        displayName: Type 2 Dimension
+        default: false
+        enableIf: "{% if config.lastModifiedComparison  %} true {% else %} false {% endif %}"
+
+      - type: changeTrackingColumns
+        isRequired: false
+        enableIf: "{% if config.lastModifiedComparison  or node.materializationType == 'view' %} false {% else %} true {% endif %}"
+
+      - displayName: Truncate Before
+        attributeName: truncateBefore
+        type: toggleButton
+        default: false
+        enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
+
+    	
+      - displayName: Unmatched Record Strategy
+        attributeName: deleteStrategy
+        type: dropdownSelector
+        default: "NO DELETE"
+        options:
+        - "NO DELETE"
+        - "SOFT DELETE"
+        - "HARD DELETE"
+        isRequired: false
+        enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"
 
       - type: toggleButton
         attributeName: insertZeroKey
