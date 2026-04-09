@@ -1,3 +1,48 @@
+## Databricks - Base Node Types  – Brief Summary
+
+- **Fact nodes**  
+  Represent measurable business events such as sales, transactions, or usage. These are the core tables used for reporting, KPIs, and trend analysis.
+
+- **Dimension nodes**  
+  Provide business context for facts, like customer, product, time, or location. They help slice and analyze facts in meaningful ways.
+
+- **Persistent nodes**  
+  Store curated, reusable data that remains stable over time. They act as trusted reference layers, reduce reprocessing, and ensure consistency across reports and teams.
+
+- **Work nodes**  
+  Temporary or intermediate processing layers used during transformations. They support complex logic and performance optimization but are not intended for direct business consumption.
+
+**Summary:**  
+Together, these node types ensure data is accurate, reusable, scalable, and aligned with business reporting and decision-making needs.
+
+----
+## Nodetypes Config Matrix
+
+| Category | Feature                         | Dim | Fact | Work | PStage |
+|----------|----------------------------------|-----|------|------|--------|
+| Create   | Create As Table                  | ✅  | ✅   | ✅   | ✅     |
+| Create   | Create As Transient Table        | ✅  | ✅   | ✅   | ✅     |
+| Create   | Create As View                   | ✅  | ✅   | ✅   | ⬜     |
+| Create   | Create with Override SQL         | ✅  | ✅   | ✅   | ⬜     |
+| Load     | MultiSource                      | ✅  | ✅   | ✅   | ✅     |
+| Load     | Insert Strategy                  | ✅  | ✅   | ✅   | ✅     |
+| Load     | Unmatched Record Strategy        | ✅  | ⬜   | ⬜   | ⬜     |
+| Load     | Business Key                     | ✅  | ✅   | ⬜   | ✅     |
+| Load     | Last Modified Comparison         | ✅  | ✅   | ⬜   | ✅     |
+| Load     | Change Tracking                  | ✅  | ⬜   | ⬜   | ✅     |
+| Load     | Truncate Before                  | ✅  | ✅   | ✅   | ✅     |
+| Load     | Distinct                         | ✅  | ✅   | ✅   | ✅     |
+| Load     | Group By All                     | ✅  | ✅   | ✅   | ✅     |
+| Load     | Order By                         | ✅  | ✅   | ✅   | ✅     |
+| Load     | Insert Zero Key Record           | ✅  | ⬜   | ⬜   | ⬜     |
+| Load     | ASOF Join Options                | ⬜  | ⬜   | ✅   | ⬜     |
+| Load     | Methods                          | MERGE<br/>INSERT/UPDATE | MERGE<br/>INSERT |INSERT | MERGE<br/>INSERT |
+| Others   | Enable Tests                     | ✅  | ✅   | ✅   | ✅     |
+| Others   | Pre-SQL                          | ✅  | ✅   | ✅   | ✅     |
+| Others   | Post-SQL                         | ✅  | ✅   | ✅   | ✅     |
+
+---
+
 # Coalesce Databricks Base Node Types Package
 
 The Coalesce Base Node Types Package includes:
