@@ -98,6 +98,57 @@ does not permit copying or modification for any other purpose.
                         GROUP BY ALL
                     {% endif %}
                     {{ sortorder_by_colv() }})
+                    {% if (config.deleteStrategy == "SOFT DELETE"
+                        or config.deleteStrategy == "HARD DELETE")
+                        and node.isMultisource == false %}
+                    /* Rows To Be Deleted As They No Longer Exist In Source */
+                    UNION ALL
+                        (
+                            SELECT
+                            {% if config.selectDistinct %}
+                                DISTINCT
+                            {% endif %}
+                            {%- for col in source.columns if not col.isSurrogateKey %}
+                                {% if col.isSystemCurrentFlag %}
+                                    '0'
+                                {% elif col.isSystemEndDate %}
+                                    DATEADD(MILLISECONDS, -1, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
+                                {% elif col.name == last_modified_col and useCurrentTimeStamp %}
+					                `DIM`.`{{col.name}}` AS `{{ col.name }}`,
+						            COALESCE(`DIM`.`{{last_modified_col}}`,CURRENT_TIMESTAMP()) as COMPARISON_VALUE,
+						            MAX (`DIM`.`{{last_modified_col}}`) AS MAX_TARGET_VALUE		    
+                                {% elif col.name == last_modified_col and not useCurrentTimeStamp%}
+					                 `DIM`.`{{col.name}}` AS `{{ col.name }}`,
+						             `DIM`.`{{last_modified_col}}` AS COMPARISON_VALUE,
+					                 MAX (`DIM`.`{{last_modified_col}}`) AS MAX_TARGET_VALUE
+                                {% else %}
+                                    `DIM`.`{{ col.name }}`
+                                {% endif %}
+                                {%if col.name != last_modified_col %} AS "{{ col.name }}" {%endif%}
+                                {%- if not loop.last %}, {% endif %}
+                            {% endfor -%}
+                   {{ get_clause(joinclause,'from') }}
+                  RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} "DIM" ON
+                            {% for col in source.columns if col.isBusinessKey -%}
+                                {% if not loop.first %}
+                                    AND
+                                {% endif %}
+                                {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
+                            {% endfor %}
+                            WHERE
+                            {% for col in source.columns if col.isBusinessKey -%}
+                                {% if not loop.first %}
+                                    AND
+                                {% endif %}
+                                {{ get_source_transform(col) }} IS NULL
+                            {% endfor %}     
+                             {{ get_clause(joinclause) }}   
+                 {% if config.groupByAll or config.lastModifiedComparison %}
+                     GROUP BY ALL
+                    {% endif %}
+                   {{ sortorder_by_colv() }}
+                        )
+                    {% endif %}
                     {% if config.insertStrategy in ['UNION', 'UNION ALL'] and not loop.last %}
                         {{config.insertStrategy}}
                     {% endif %}
@@ -112,7 +163,25 @@ does not permit copying or modification for any other purpose.
                     `SRC`.`{{ col.name }}` = `TGT`.`{{ col.name }}`
 					
                 {% endfor %}
-    WHEN MATCHED
+                {% if (config.deleteStrategy == "SOFT DELETE"
+                    or config.deleteStrategy == "HARD DELETE")
+                    and node.isMultisource == false %}
+
+                  WHEN MATCHED AND `SRC`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` = '0'
+                  {% if config.deleteStrategy == "HARD DELETE" %}
+                    /* Hard delete rows */
+                    THEN DELETE
+                  {% else %}
+                    /* Soft delete rows */
+                    THEN UPDATE SET
+                    {% for col in columns if (col.isSystemCurrentFlag
+                                                or col.isSystemEndDate) %}
+                            {% if not loop.first %} , {% endif %}
+                        `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
+                    {% endfor %}
+                  {% endif %}
+                {% endif %}
+                  WHEN MATCHED
 				{%if not config.lastModifiedComparison%}
                 {% for col in columns if not (   col.isBusinessKey or
                                                         col.isSystemUpdateDate or

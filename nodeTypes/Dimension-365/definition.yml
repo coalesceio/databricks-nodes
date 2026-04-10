@@ -84,8 +84,20 @@ metadata:
     - groupName: Dimension Options
       items:
 
+      - displayName: Unmatched Record Strategy
+        attributeName: deleteStrategy
+        type: dropdownSelector
+        default: "NO DELETE"
+        options:
+        - "NO DELETE"
+        - "SOFT DELETE"
+        - "HARD DELETE"
+        isRequired: false
+        enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"
+
       - type: businessKeyColumns
         isRequired: true
+
       - type: toggleButton
         attributeName: lastModifiedComparison
         displayName: Last Modified Comparison
@@ -131,18 +143,6 @@ metadata:
         type: toggleButton
         default: false
         enableIf: "{% if node.materializationType == 'view' %} false {% else %} true {% endif %}"
-
-    	
-      - displayName: Unmatched Record Strategy
-        attributeName: deleteStrategy
-        type: dropdownSelector
-        default: "NO DELETE"
-        options:
-        - "NO DELETE"
-        - "SOFT DELETE"
-        - "HARD DELETE"
-        isRequired: false
-        enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"
 
       - type: toggleButton
         attributeName: insertZeroKey

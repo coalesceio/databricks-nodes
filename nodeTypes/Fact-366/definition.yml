@@ -34,6 +34,17 @@ metadata:
         - "UNION ALL"
         isRequired: false
         enableIf: "{% if not(node.materializationType == 'view' and node.override.create.enabled) and node.isMultisource %} true {% else %} false {% endif %}"
+      
+      - displayName: Unmatched Record Strategy
+        attributeName: deleteStrategy
+        type: dropdownSelector
+        default: "NO DELETE"
+        options:
+        - "NO DELETE"
+        - "SOFT DELETE"
+        - "HARD DELETE"
+        isRequired: false
+        enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"
 
       - type: businessKeyColumns
         isRequired: false
