@@ -394,17 +394,21 @@ does not permit copying or modification for any other purpose.
                     {% endfor %}
 
                     WHERE
-                    {% for col in source.columns if col.isBusinessKey -%}
-                        {% if not loop.first %}
-                            AND
+                    {% for col in source.columns if col.isBusinessKey or col.isSurrogateKey -%}
+                        {%if not loop.first%}
+                          AND
+                        {%endif%}
+                        {% if col.isBusinessKey %}
+                            {{ get_source_transform(col) }} IS NULL
                         {% endif %}
-                        {{ get_source_transform(col) }} IS NULL
-
+                        {% if col.isSurrogateKey and config.insertZeroKey %}
+                           AND `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
+                        {% endif %}
                         {% if config.deleteStrategy == "SOFT DELETE" %}
                             AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
                         {% endif %}
                     {% endfor %}
-                
+                    
                     {{ get_clause(joinclause) }}
 
                     {% if config.groupByAll %}
@@ -677,7 +681,7 @@ does not permit copying or modification for any other purpose.
                                 {% if col.isSystemCurrentFlag %}
                                     '0'
                                 {% elif col.isSystemEndDate %}
-                                    DATEADD(MILLISECONDS, -1, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
+                                    DATEADD(SECOND,-0.001, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
                                 {% elif col.name == last_modified_col and useCurrentTimeStamp %}
 					                `DIM`.`{{col.name}}` AS `{{ col.name }}`,
 						            COALESCE(`DIM`.`{{last_modified_col}}`,CURRENT_TIMESTAMP()) as COMPARISON_VALUE,
@@ -689,11 +693,11 @@ does not permit copying or modification for any other purpose.
                                 {% else %}
                                     `DIM`.`{{ col.name }}`
                                 {% endif %}
-                                {%if col.name != last_modified_col %} AS "{{ col.name }}" {%endif%}
+                                {%if col.name != last_modified_col %} AS `{{ col.name }}` {%endif%}
                                 {%- if not loop.last %}, {% endif %}
                             {% endfor -%}
                    {{ get_clause(joinclause,'from') }}
-                  RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} "DIM" ON
+                  RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
                             {% for col in source.columns if col.isBusinessKey -%}
                                 {% if not loop.first %}
                                     AND
@@ -701,13 +705,22 @@ does not permit copying or modification for any other purpose.
                                 {{ get_source_transform(col) }} = `DIM`.`{{ col.name }}`
                             {% endfor %}
                             WHERE
-                            {% for col in source.columns if col.isBusinessKey -%}
-                                {% if not loop.first %}
-                                    AND
-                                {% endif %}
-                                {{ get_source_transform(col) }} IS NULL
-                            {% endfor %}     
-                             {{ get_clause(joinclause) }}   
+                            
+                      {% for col in source.columns if col.isBusinessKey or col.isSurrogateKey -%}
+                        {%if not loop.first%}
+                          AND
+                        {%endif%}
+                        {% if col.isBusinessKey %}
+                            {{ get_source_transform(col) }} IS NULL
+                        {% endif %}
+                        {% if col.isSurrogateKey and config.insertZeroKey %}
+                           AND `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
+                        {% endif %}
+                        {% if config.deleteStrategy == "SOFT DELETE" %}
+                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
+                        {% endif %}
+                     {% endfor %} 
+                    {{ get_clause(joinclause) }}   
                  {% if config.groupByAll or config.lastModifiedComparison %}
                      GROUP BY ALL
                     {% endif %}
