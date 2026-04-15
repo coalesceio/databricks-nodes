@@ -1,0 +1,154 @@
+fileVersion: 1
+id: e88c5eaa-0384-4000-b053-4e6977d11dd8
+name: fct_clients_hd
+operation:
+  config:
+    deleteStrategy: HARD DELETE
+    groupByAll: false
+    insertStrategy: UNION ALL
+    lastModifiedComparison: false
+    orderby: false
+    orderbycolumn:
+      items:
+        - {}
+    postSQL: ""
+    preSQL: ""
+    selectDistinct: false
+    testsEnabled: false
+    treatNullAsCurrentTimestamp: false
+    truncateBefore: false
+  database: ""
+  deployEnabled: true
+  description: ""
+  isMultisource: false
+  locationName: TARGET
+  materializationType: table
+  metadata:
+    appliedNodeTests: []
+    columns:
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 6530efd3-2cdf-4603-b25a-70ecd467c2e3
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: INT
+        description: ""
+        isBusinessKey: true
+        name: client_id
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: b0f8a7fd-a528-436d-90ca-ebb7d9271cd2
+                stepCounter: 49686d14-212c-4619-b50a-9e19a793cd28
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: a5525fd9-d956-4e4d-87b7-d1b8d86e046d
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: STRING
+        description: ""
+        name: client_name
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 77df7755-11cd-4d59-9905-5986e27e0de9
+                stepCounter: 49686d14-212c-4619-b50a-9e19a793cd28
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 163bd1a4-7277-4c8c-8766-b86aad022b73
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: STRING
+        description: ""
+        name: email
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: d568d6ee-17d8-4adf-9491-79d210dd519c
+                stepCounter: 49686d14-212c-4619-b50a-9e19a793cd28
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: 9dc5b9d8-afb5-41e9-96d6-7b0e4af5dee7
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: STRING
+        description: ""
+        name: region
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 37042449-a997-4609-9557-19740b186f64
+                stepCounter: 49686d14-212c-4619-b50a-9e19a793cd28
+            transform: ""
+      - appliedColumnTests: {}
+        columnReference:
+          columnCounter: c4379ebc-fe6c-4feb-b044-2625e1e2e20d
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: TIMESTAMP
+        description: ""
+        name: update_time
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: 09ed77d2-d44e-40b6-909a-5256e0e8ee70
+                stepCounter: 49686d14-212c-4619-b50a-9e19a793cd28
+            transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7878aa0b-eb6a-4629-91b9-47157d111967
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        isSystemCreateDate: true
+        name: SYSTEM_CREATE_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 629fb939-b631-4f52-a530-34cd8dc8ff93
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: TIMESTAMP
+        defaultValue: ""
+        description: ""
+        isSystemUpdateDate: true
+        name: SYSTEM_UPDATE_DATE
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences: []
+            transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
+    cteString: ""
+    enabledColumnTestIDs: []
+    sourceMapping:
+      - aliases:
+          clients: 49686d14-212c-4619-b50a-9e19a793cd28
+        customSQL:
+          customSQL: ""
+        dependencies:
+          - locationName: FEDS
+            nodeName: clients
+        join:
+          joinCondition: FROM {{ ref('FEDS', 'clients') }} `clients`
+        name: fct_clients_hd
+        noLinkRefs: []
+  name: fct_clients_hd
+  overrideSQL: false
+  schema: ""
+  sqlType: "366"
+  type: sql
+  version: 1
+type: Node

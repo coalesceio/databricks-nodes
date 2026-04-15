@@ -41,7 +41,6 @@ metadata:
         default: "NO DELETE"
         options:
         - "NO DELETE"
-        - "SOFT DELETE"
         - "HARD DELETE"
         isRequired: false
         enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"

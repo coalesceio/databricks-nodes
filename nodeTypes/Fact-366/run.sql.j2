@@ -62,6 +62,7 @@ does not permit copying or modification for any other purpose.
                 USING (
                 
                 {% for source in sources %}
+                    {% set joinclause = source.join %}
                     (SELECT
                     {% if config.selectDistinct %}
                     DISTINCT
@@ -80,6 +81,10 @@ does not permit copying or modification for any other purpose.
                        {%endif%}
                        {%- if not loop.last %}, {% endif %}
                     {% endfor %}
+                    {% if config.deleteStrategy == "HARD DELETE"
+                        and node.isMultisource == false %}
+                        ,'I' as delete_flag
+                    {%endif%}
                     {{ get_clause(source.join,'from')}}
                     {%if config.lastModifiedComparison%}	        
                         LEFT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
@@ -98,8 +103,7 @@ does not permit copying or modification for any other purpose.
                         GROUP BY ALL
                     {% endif %}
                     {{ sortorder_by_colv() }})
-                    {% if (config.deleteStrategy == "SOFT DELETE"
-                        or config.deleteStrategy == "HARD DELETE")
+                    {% if config.deleteStrategy == "HARD DELETE"
                         and node.isMultisource == false %}
                     /* Rows To Be Deleted As They No Longer Exist In Source */
                     UNION ALL
@@ -109,9 +113,7 @@ does not permit copying or modification for any other purpose.
                                 DISTINCT
                             {% endif %}
                             {%- for col in source.columns if not col.isSurrogateKey %}
-                                {% if col.isSystemCurrentFlag %}
-                                    '0'
-                                {% elif col.isSystemEndDate %}
+                                {% if col.isSystemEndDate %}
                                     DATEADD(SECOND,-0.001, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
                                 {% elif col.name == last_modified_col and useCurrentTimeStamp %}
 					                `DIM`.`{{col.name}}` AS `{{ col.name }}`,
@@ -127,6 +129,7 @@ does not permit copying or modification for any other purpose.
                                 {%if col.name != last_modified_col %} AS `{{ col.name }}` {%endif%}
                                 {%- if not loop.last %}, {% endif %}
                             {% endfor -%}
+                            ,'D' AS delete_flag
                    {{ get_clause(joinclause,'from') }}
                   RIGHT JOIN {{ ref_no_link(node.location.name, node.name) }} `DIM` ON
                             {% for col in source.columns if col.isBusinessKey -%}
@@ -163,23 +166,10 @@ does not permit copying or modification for any other purpose.
                     `SRC`.`{{ col.name }}` = `TGT`.`{{ col.name }}`
 					
                 {% endfor %}
-                {% if (config.deleteStrategy == "SOFT DELETE"
-                    or config.deleteStrategy == "HARD DELETE")
+                {% if config.deleteStrategy == "HARD DELETE"
                     and node.isMultisource == false %}
-
-                  WHEN MATCHED AND `SRC`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` = '0'
-                  {% if config.deleteStrategy == "HARD DELETE" %}
-                    /* Hard delete rows */
+                  WHEN MATCHED AND `SRC`.`delete_flag` = 'D'
                     THEN DELETE
-                  {% else %}
-                    /* Soft delete rows */
-                    THEN UPDATE SET
-                    {% for col in columns if (col.isSystemCurrentFlag
-                                                or col.isSystemEndDate) %}
-                            {% if not loop.first %} , {% endif %}
-                        `TGT`.`{{ col.name }}` = `SRC`.`{{ col.name }}`
-                    {% endfor %}
-                  {% endif %}
                 {% endif %}
                   WHEN MATCHED
 				{%if not config.lastModifiedComparison%}

@@ -6,7 +6,9 @@ operation:
     deleteStrategy: SOFT DELETE
     groupByAll: false
     insertStrategy: UNION ALL
-    lastModifiedColumn: ""
+    lastModifiedColumn:
+      columnCounter: 380d38c6-325f-43f2-bf68-f4c71ae6580e
+      stepCounter: a01239ce-006c-461b-9687-101f86ac89cb
     lastModifiedComparison: true
     orderby: false
     orderbycolumn:
@@ -18,7 +20,7 @@ operation:
     testsEnabled: false
     treatNullAsCurrentTimestamp: false
     truncateBefore: false
-    type2Dimension: false
+    type2Dimension: true
   database: ""
   deployEnabled: true
   description: ""
