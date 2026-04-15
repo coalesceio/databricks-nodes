@@ -615,7 +615,7 @@ does not permit copying or modification for any other purpose.
                                 {% if col.isSystemCurrentFlag %}
                                     '0'
                                 {% elif col.isSystemEndDate %}
-                                    DATEADDSECOND,-0.001, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
+                                    DATEADD(SECOND,-0.001, CAST(CURRENT_TIMESTAMP AS TIMESTAMP))
                                 {% elif col.name == last_modified_col and useCurrentTimeStamp %}
 					                `DIM`.`{{col.name}}` AS `{{ col.name }}`,
 						            COALESCE(`DIM`.`{{last_modified_col}}`,CURRENT_TIMESTAMP()) as COMPARISON_VALUE,
@@ -644,7 +644,10 @@ does not permit copying or modification for any other purpose.
                                     AND
                                 {% endif %}
                                 {{ get_source_transform(col) }} IS NULL
-                            {% endfor %}     
+                            {% endfor %}   
+                            {% if config.deleteStrategy == "SOFT DELETE" %}
+                              AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
+                            {% endif %}  
                              {{ get_clause(joinclause) }}   
                      {% if config.groupByAll or config.lastModifiedComparison %}
                      GROUP BY ALL

@@ -1,0 +1,14 @@
+fileVersion: 1
+id: 4f9d6de0-2ec7-4815-a28c-756f981838b2
+name: ZKey ,Last Modified and Soft/Hard delete
+steps:
+  - 0399fade-26a8-4b1b-8843-1802f4d2cdb6
+  - 49686d14-212c-4619-b50a-9e19a793cd28
+  - 4e4a3fac-9a5d-474c-b34d-4008ce33e92b
+  - 592bdb5c-3b9b-4244-8a37-009c9f49d32e
+  - 9d592e76-2cd7-41d8-94a8-bc18928f8c0d
+  - a01239ce-006c-461b-9687-101f86ac89cb
+  - aaee27bf-91c2-40af-82e7-b3aff300fe1a
+  - b3bca084-668c-4475-8649-5a242b4c5194
+  - bec51223-f112-4815-9fdf-97bcd5a2120b
+type: Subgraph

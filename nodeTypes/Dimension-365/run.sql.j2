@@ -303,7 +303,7 @@ does not permit copying or modification for any other purpose.
                 {%endif%}
             {% endfor %}  
             {%endif%}
-            {%if not config. lastModifiedComparison%}																					
+            {%if not config.lastModifiedComparison%}																					
             {% for col in source.columns if (col.isChangeTracking == true) %}
                 {% if loop.first %}
                     AND (
@@ -402,13 +402,13 @@ does not permit copying or modification for any other purpose.
                             {{ get_source_transform(col) }} IS NULL
                         {% endif %}
                         {% if col.isSurrogateKey and config.insertZeroKey %}
-                           AND `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
+                           `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
                         {% endif %}
-                        {% if config.deleteStrategy == "SOFT DELETE" %}
-                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
-                        {% endif %}
+                       
                     {% endfor %}
-                    
+                    {% if config.deleteStrategy == "SOFT DELETE" %}
+                          AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
+                    {% endif %}
                     {{ get_clause(joinclause) }}
 
                     {% if config.groupByAll %}
@@ -543,7 +543,6 @@ does not permit copying or modification for any other purpose.
                 {% else %}
                         (	 
                   NVL( CAST({{ get_source_transform(col) }} as STRING), '**NULL**') <> NVL( CAST(`DIM`.`{{ col.name }}` as STRING), '**NULL**')
-                            NVL(CAST(`DIM`.`{{ col.name }}` AS STRING), '**NULL**')
                         )
                     {% endif %}
 
@@ -714,12 +713,12 @@ does not permit copying or modification for any other purpose.
                             {{ get_source_transform(col) }} IS NULL
                         {% endif %}
                         {% if col.isSurrogateKey and config.insertZeroKey %}
-                           AND `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
-                        {% endif %}
-                        {% if config.deleteStrategy == "SOFT DELETE" %}
-                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
+                           `DIM`.`{{ col.name }}` <> {{config.insertZeroKeySurrogateKey}}
                         {% endif %}
                      {% endfor %} 
+                     {% if config.deleteStrategy == "SOFT DELETE" %}
+                            AND `DIM`.`{{ get_value_by_column_attribute("isSystemCurrentFlag") }}` != '0'
+                     {% endif %}
                     {{ get_clause(joinclause) }}   
                  {% if config.groupByAll or config.lastModifiedComparison %}
                      GROUP BY ALL
