@@ -43,7 +43,11 @@ metadata:
         - "NO DELETE"
         - "HARD DELETE"
         isRequired: false
-        enableIf: "{% if node.materializationType != 'view' and node.isMultisource == false %} true {% else %} false {% endif %}"
+        enableIf: "{% if node.materializationType != 'view' and (columns 
+                      | selectattr('isBusinessKey')
+                      | list
+                      | length > 0) %} true {% else %} false {% endif %}"
+
 
       - type: businessKeyColumns
         isRequired: false

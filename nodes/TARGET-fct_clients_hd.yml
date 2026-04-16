@@ -131,6 +131,26 @@ operation:
         sourceColumnReferences:
           - columnReferences: []
             transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 7947fb17-8f61-436a-b05c-014740452d4e
+          stepCounter: e88c5eaa-0384-4000-b053-4e6977d11dd8
+        config: {}
+        dataType: string
+        defaultValue: ""
+        description: ""
+        keyColumnType: None
+        name: QUALIFYFLAG
+        nullable: true
+        sourceColumnReferences:
+          - columnReferences:
+              - columnCounter: "0"
+                stepCounter: "0"
+            transform: "'Y'"
+        systemColumnType: None
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
@@ -142,7 +162,9 @@ operation:
           - locationName: FEDS
             nodeName: clients
         join:
-          joinCondition: FROM {{ ref('FEDS', 'clients') }} `clients`
+          joinCondition: |-
+            FROM {{ ref('FEDS', 'clients') }} `clients`
+            QUALIFY row_number() OVER ( PARTITION BY `clients`.`client_id` ORDER BY `clients`.`update_time` DESC) = 1
         name: fct_clients_hd
         noLinkRefs: []
   name: fct_clients_hd

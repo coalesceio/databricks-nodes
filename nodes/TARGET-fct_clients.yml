@@ -1,15 +1,12 @@
 fileVersion: 1
-id: fe94ef37-404a-4f3a-be0f-61565e185a7e
-name: fct_clients_hd_lm
+id: 641bec24-0198-4665-bcf8-8de263247ca8
+name: fct_clients
 operation:
   config:
-    deleteStrategy: HARD DELETE
+    deleteStrategy: NO DELETE
     groupByAll: false
     insertStrategy: UNION ALL
-    lastModifiedColumn:
-      columnCounter: fd9e7155-b7b5-41ad-8e38-f1dd36c00c20
-      stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
-    lastModifiedComparison: true
+    lastModifiedComparison: false
     orderby: false
     orderbycolumn:
       items:
@@ -18,7 +15,7 @@ operation:
     preSQL: ""
     selectDistinct: false
     testsEnabled: false
-    treatNullAsCurrentTimestamp: true
+    treatNullAsCurrentTimestamp: false
     truncateBefore: false
   database: ""
   deployEnabled: true
@@ -31,12 +28,11 @@ operation:
     columns:
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 782b6db4-d85f-48cf-a10b-43c851585b5d
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: b42fce78-06c0-41ff-9d80-5aa8fc190d07
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: INT
         description: ""
-        isBusinessKey: true
         name: client_id
         nullable: true
         sourceColumnReferences:
@@ -46,8 +42,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: ab39ff5d-9be9-47b1-b00e-55e2ec5986e9
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 24cda2f8-f9ae-4153-86fd-816fedeb7899
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: STRING
         description: ""
@@ -60,8 +56,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 540bdb43-f6e2-4db1-8535-ae45661a5e65
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 24a4a489-490b-4f7e-9420-10c714928ae3
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: STRING
         description: ""
@@ -74,8 +70,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: 628a1443-e126-424a-a892-1d72b9b2cdb6
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 7e0a4fd1-4958-460d-832b-723551491298
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: STRING
         description: ""
@@ -88,8 +84,8 @@ operation:
             transform: ""
       - appliedColumnTests: {}
         columnReference:
-          columnCounter: fd9e7155-b7b5-41ad-8e38-f1dd36c00c20
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 01f0acd2-403b-452a-81a1-4bd8729dbf88
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: TIMESTAMP
         description: ""
@@ -105,8 +101,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: 45bae22b-7302-42d9-be9b-b58d38894125
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 09641ca9-b67e-4020-9f7a-1d496e519d07
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -122,8 +118,8 @@ operation:
           values: []
         appliedColumnTests: {}
         columnReference:
-          columnCounter: d74b194a-c59c-40b7-bd26-2a96d8ca54c0
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
+          columnCounter: 8fea062c-efa0-459b-9c71-68a475c09dbc
+          stepCounter: 641bec24-0198-4665-bcf8-8de263247ca8
         config: {}
         dataType: TIMESTAMP
         defaultValue: ""
@@ -134,26 +130,6 @@ operation:
         sourceColumnReferences:
           - columnReferences: []
             transform: CAST(CURRENT_TIMESTAMP AS TIMESTAMP)
-      - acceptedValues:
-          strictMatch: true
-          values: []
-        appliedColumnTests: {}
-        columnReference:
-          columnCounter: 40d6df53-66c2-4dcf-ba3c-7f2b61cc6fbd
-          stepCounter: fe94ef37-404a-4f3a-be0f-61565e185a7e
-        config: {}
-        dataType: STRING
-        defaultValue: ""
-        description: ""
-        keyColumnType: None
-        name: WHEREKEY
-        nullable: true
-        sourceColumnReferences:
-          - columnReferences:
-              - columnCounter: "0"
-                stepCounter: "0"
-            transform: "'D'"
-        systemColumnType: None
     cteString: ""
     enabledColumnTestIDs: []
     sourceMapping:
@@ -165,12 +141,10 @@ operation:
           - locationName: FEDS
             nodeName: clients
         join:
-          joinCondition: |-
-            FROM {{ ref('FEDS', 'clients') }} `clients`
-            WHERE WHEREKEY = 'D'
-        name: fct_clients_hd_lm
+          joinCondition: FROM {{ ref('FEDS', 'clients') }} `clients`
+        name: fct_clients
         noLinkRefs: []
-  name: fct_clients_hd_lm
+  name: fct_clients
   overrideSQL: false
   schema: ""
   sqlType: "366"

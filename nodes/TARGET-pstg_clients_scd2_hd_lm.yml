@@ -3,7 +3,7 @@ id: a01239ce-006c-461b-9687-101f86ac89cb
 name: pstg_clients_scd2_hd_lm
 operation:
   config:
-    deleteStrategy: SOFT DELETE
+    deleteStrategy: HARD DELETE
     groupByAll: false
     insertStrategy: UNION ALL
     lastModifiedColumn:
