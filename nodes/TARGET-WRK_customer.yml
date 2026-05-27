@@ -143,6 +143,25 @@ operation:
               - columnCounter: 8bac3570-4bd7-41b3-a349-f9e2a2cb8cc6
                 stepCounter: b2ccf82d-d235-4482-b7c8-17f0ca5e8a0e
             transform: ""
+      - acceptedValues:
+          strictMatch: true
+          values: []
+        appliedColumnTests: {}
+        columnReference:
+          columnCounter: 69fe69ae-012c-48e5-8489-fedaf3979022
+          stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+        config: {}
+        dataType: STRING
+        defaultValue: ""
+        description: ""
+        hashDetails:
+          hashAlgorithm: SHA1
+        hashedColumns:
+          - columnCounter: 9495bb57-4f79-40cb-a6d9-2170418c1d3c
+            stepCounter: a045289f-b655-4332-82cd-83ed15c594eb
+        name: GH
+        nullable: true
+        sourceColumnReferences: []
     cteString: ""
     enabledColumnTestIDs:
       - hasNull
@@ -160,7 +179,7 @@ operation:
   name: WRK_customer
   overrideSQL: false
   schema: ""
-  sqlType: "363"
+  sqlType: "447"
   type: sql
   version: 1
 type: Node
